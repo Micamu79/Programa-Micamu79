@@ -1,0 +1,2900 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programa Micamu79</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#f5f6f8;
+  color:#18202a;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+
+header{
+  background:#20252b;
+  color:white;
+  padding:20px 16px;
+}
+
+header h1{
+  margin:0;
+  font-size:25px;
+}
+
+header p{
+  margin:6px 0 0;
+  font-size:13px;
+  opacity:.8;
+}
+
+main{
+  max-width:780px;
+  margin:auto;
+  padding:12px;
+}
+
+.card{
+  background:white;
+  border:1px solid #e1e4e8;
+  border-radius:16px;
+  padding:15px;
+  margin:12px 0;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+
+h2{
+  font-size:18px;
+  margin:0 0 12px;
+}
+
+h3{
+  font-size:15px;
+  margin:16px 0 9px;
+}
+
+label{
+  display:block;
+  font-size:12px;
+  font-weight:600;
+  margin-bottom:5px;
+}
+
+button,
+select,
+input{
+  font:inherit;
+}
+
+button,
+select,
+input{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #d9dde2;
+  background:white;
+}
+
+button{
+  background:#20252b;
+  color:white;
+  font-weight:600;
+  border:0;
+  cursor:pointer;
+}
+
+button.secondary{
+  background:#eef0f2;
+  color:#18202a;
+}
+
+button.danger{
+  background:#e53e3e;
+}
+
+button.adjust{
+  margin-top:4px;
+  background:#3b6ea8;
+}
+
+button.small-button{
+  width:auto;
+  padding:8px 12px;
+  font-size:12px;
+}
+
+.days{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:7px;
+}
+
+.days button{
+  background:white;
+  color:#18202a;
+  border:1px solid #ddd;
+}
+
+.days button.active{
+  background:#20252b;
+  color:white;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 105px;
+  gap:7px;
+  margin:7px 0;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+}
+
+.macro{
+  background:#f1f3f5;
+  border-radius:10px;
+  padding:9px 4px;
+  text-align:center;
+  font-size:11px;
+  color:#69717a;
+}
+
+.macro b{
+  display:block;
+  font-size:16px;
+  color:#18202a;
+  margin-bottom:2px;
+}
+
+.profile-box{
+  background:#f1f3f5;
+  border-radius:12px;
+  padding:12px;
+  margin-bottom:10px;
+}
+
+.profile-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+
+.info-line{
+  font-size:13px;
+  margin:4px 0;
+}
+
+.info-line b{
+  float:right;
+}
+
+.small{
+  font-size:12px;
+  color:#6b7280;
+  line-height:1.45;
+}
+
+.notice{
+  padding:11px;
+  border-radius:10px;
+  margin-top:10px;
+  font-size:13px;
+  line-height:1.45;
+}
+
+.ok{
+  background:#edf8f1;
+  color:#176b40;
+}
+
+.warn{
+  background:#fff6da;
+  color:#8a6100;
+}
+
+.bad{
+  background:#ffefed;
+  color:#a52218;
+}
+
+.info{
+  background:#ebf8ff;
+  color:#2b6cb0;
+}
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+}
+
+.food-block{
+  border-top:1px solid #eee;
+  padding-top:10px;
+  margin-top:12px;
+}
+
+.quantity-row{
+  display:grid;
+  grid-template-columns:1fr 105px;
+  gap:7px;
+  align-items:center;
+}
+
+.quantity-input{
+  text-align:center;
+  font-weight:700;
+}
+
+.recommendation{
+  background:#f7f8fa;
+  border-radius:10px;
+  padding:9px;
+  margin-top:7px;
+  font-size:12px;
+  color:#4b5563;
+}
+
+.weight-list{
+  max-height:180px;
+  overflow-y:auto;
+  margin-top:10px;
+  border:1px solid #eee;
+  border-radius:8px;
+  padding:5px;
+}
+
+.weight-item{
+  display:flex;
+  justify-content:space-between;
+  padding:6px 8px;
+  font-size:13px;
+  border-bottom:1px solid #f0f0f0;
+}
+
+.weight-item:last-child{
+  border:0;
+}
+
+canvas{
+  width:100%;
+  height:190px;
+  background:#fafafa;
+  border-radius:10px;
+  border:1px solid #eaeaea;
+  margin-top:10px;
+}
+
+.hidden{
+  display:none !important;
+}
+
+footer{
+  font-size:11px;
+  color:#707780;
+  padding:10px 3px 30px;
+  line-height:1.45;
+}
+
+@media(max-width:500px){
+
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .form-grid,
+  .profile-grid{
+    grid-template-columns:1fr;
+  }
+
+  .row{
+    grid-template-columns:1fr 95px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Programa Micamu79</h1>
+  <p>Plan nutricional personalizado</p>
+</header>
+
+<main>
+
+<!-- PERFIL -->
+<div class="card">
+  <div class="section-title">
+    <h2>👤 Tu perfil</h2>
+    <button class="small-button secondary" onclick="mostrarPerfil()">Editar</button>
+  </div>
+
+  <div id="profileSummary"></div>
+</div>
+
+<!-- CONFIGURACIÓN DE OBJETIVOS -->
+<div class="card">
+  <h2>🎯 Objetivo nutricional</h2>
+
+  <div id="calorieSummary"></div>
+
+  <h3>Déficit calórico</h3>
+
+  <select id="deficitSelect" onchange="cambiarDeficit()">
+    <option value="10">10% - Déficit suave</option>
+    <option value="15" selected>15% - Déficit moderado recomendado</option>
+    <option value="20">20% - Déficit alto</option>
+  </select>
+
+  <div id="macroSummary" style="margin-top:12px"></div>
+</div>
+
+<!-- ACTIVIDAD -->
+<div class="card">
+  <h2>🔥 Actividad y gasto</h2>
+
+  <div class="row">
+    <select id="activityLevel" onchange="actualizarCalculoEnergetico()">
+      <option value="1.2">Sedentario</option>
+      <option value="1.35">Poco activo</option>
+      <option value="1.5" selected>Moderadamente activo</option>
+      <option value="1.65">Activo</option>
+      <option value="1.8">Muy activo</option>
+    </select>
+
+    <input
+      id="activeCalories"
+      type="number"
+      min="0"
+      placeholder="kcal activas"
+      oninput="actualizarCalculoEnergetico()"
+    >
+  </div>
+
+  <div class="notice info">
+    💡 <b>Calorías en movimiento</b><br>
+    Puedes introducir las calorías activas que te indique tu smartwatch o smartphone.
+    Son una estimación y pueden variar según el dispositivo.
+  </div>
+
+  <div id="energyDetails"></div>
+</div>
+
+<!-- SEMANA -->
+<div class="card">
+  <h2>📅 Semana</h2>
+  <div id="days" class="days"></div>
+</div>
+
+<!-- APP -->
+<div id="app"></div>
+
+<!-- RESUMEN -->
+<div class="card">
+  <h2>📊 Resumen del día</h2>
+  <div id="summary"></div>
+</div>
+
+<!-- PESO -->
+<div class="card">
+
+  <h2>⚖️ Control de peso</h2>
+
+  <p class="small">
+    Añade tu peso al levantarte. La aplicación calcula medias semanales
+    para observar la tendencia y evitar interpretar como pérdida o ganancia
+    real las fluctuaciones de agua.
+  </p>
+
+  <div class="row">
+    <input
+      id="inputWeight"
+      type="number"
+      step="0.1"
+      min="0"
+      placeholder="Ej: 98.5"
+    >
+    <button onclick="guardarPeso()">Guardar</button>
+  </div>
+
+  <h3>📈 Tendencia semanal</h3>
+
+  <canvas id="weightChart"></canvas>
+
+  <h3>📜 Historial</h3>
+
+  <div id="weightHistory" class="weight-list"></div>
+
+  <button
+    style="margin-top:10px"
+    class="danger"
+    onclick="limpiarPesos()"
+  >
+    Borrar historial de peso
+  </button>
+
+</div>
+
+<footer>
+  Los valores nutricionales son orientativos. Las cantidades de arroz,
+  pasta, avena, quinoa, cuscús y otros cereales se consideran en crudo.
+  Las cantidades de carne y pescado corresponden al alimento indicado.
+  Las calorías activas de relojes y teléfonos son estimaciones.
+</footer>
+
+</main>
+
+
+<!-- MODAL PERFIL -->
+<div
+  id="profileModal"
+  class="hidden"
+  style="
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    padding:15px;
+    overflow-y:auto;
+    z-index:1000;
+  "
+>
+
+  <div
+    class="card"
+    style="max-width:520px;margin:30px auto;"
+  >
+
+    <h2>👤 Datos personales</h2>
+
+    <div class="form-grid">
+
+      <div>
+        <label>Sexo</label>
+        <select id="profileSex">
+          <option value="hombre">Hombre</option>
+          <option value="mujer">Mujer</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Edad</label>
+        <input
+          id="profileAge"
+          type="number"
+          min="14"
+          max="100"
+          placeholder="Ej: 40"
+        >
+      </div>
+
+      <div>
+        <label>Peso (kg)</label>
+        <input
+          id="profileWeight"
+          type="number"
+          min="30"
+          max="300"
+          step="0.1"
+          placeholder="Ej: 80"
+        >
+      </div>
+
+      <div>
+        <label>Altura (cm)</label>
+        <input
+          id="profileHeight"
+          type="number"
+          min="120"
+          max="230"
+          placeholder="Ej: 175"
+        >
+      </div>
+
+    </div>
+
+    <div style="margin-top:12px">
+
+      <label>
+        ¿Conoces tus calorías de reposo?
+      </label>
+
+      <input
+        id="profileRestCalories"
+        type="number"
+        min="500"
+        max="4000"
+        placeholder="Opcional"
+      >
+
+      <p class="small">
+        Si lo dejas vacío, la aplicación calculará una estimación
+        mediante una fórmula basada en sexo, edad, peso y altura.
+      </p>
+
+    </div>
+
+    <div class="row" style="margin-top:15px">
+      <button onclick="guardarPerfil()">Guardar</button>
+      <button
+        class="secondary"
+        onclick="cerrarPerfil()"
+      >
+        Cancelar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+
+/* =========================================================
+   DATOS Y CONFIGURACIÓN
+========================================================= */
+
+const STORAGE_PROFILE = "micamu79_perfil";
+const STORAGE_SETTINGS = "micamu79_config";
+const STORAGE_WEIGHT = "micamu79_pesos";
+
+let perfil = JSON.parse(localStorage.getItem(STORAGE_PROFILE)) || null;
+
+let config = JSON.parse(localStorage.getItem(STORAGE_SETTINGS)) || {
+  deficit:15,
+  activityLevel:1.5,
+  activeCalories:0
+};
+
+let historialPesos =
+  JSON.parse(localStorage.getItem(STORAGE_WEIGHT)) || [];
+
+let diaActual = 0;
+
+
+/* =========================================================
+   BASE DE ALIMENTOS
+========================================================= */
+
+const alimentos = {
+
+  /* CARBOHIDRATOS */
+
+  pan:{
+    nombre:"Pan",
+    categoria:"carbo",
+    kcal:250,p:8,c:49,g:2
+  },
+
+  arroz:{
+    nombre:"Arroz",
+    categoria:"carbo",
+    kcal:360,p:7,c:80,g:1
+  },
+
+  pasta:{
+    nombre:"Pasta",
+    categoria:"carbo",
+    kcal:350,p:12,c:72,g:2
+  },
+
+  patata:{
+    nombre:"Patata",
+    categoria:"carbo",
+    kcal:77,p:2,c:17,g:.1
+  },
+
+  boniato:{
+    nombre:"Boniato",
+    categoria:"carbo",
+    kcal:86,p:1.6,c:20,g:.1
+  },
+
+  avena:{
+    nombre:"Avena",
+    categoria:"carbo",
+    kcal:380,p:13,c:67,g:7
+  },
+
+  quinoa:{
+    nombre:"Quinoa",
+    categoria:"carbo",
+    kcal:368,p:14,c:64,g:6
+  },
+
+  couscous:{
+    nombre:"Cuscús",
+    categoria:"carbo",
+    kcal:376,p:12.8,c:77,g:.6
+  },
+
+  pan_integral:{
+    nombre:"Pan integral",
+    categoria:"carbo",
+    kcal:247,p:9,c:41,g:4
+  },
+
+  tortitas_arroz:{
+    nombre:"Tortitas de arroz",
+    categoria:"carbo",
+    kcal:387,p:8,c:81,g:3
+  },
+
+  legumbres:{
+    nombre:"Legumbres cocidas",
+    categoria:"carbo",
+    kcal:120,p:8,c:18,g:1
+  },
+
+  /* PROTEÍNAS */
+
+  pollo:{
+    nombre:"Pechuga de pollo",
+    categoria:"proteina",
+    kcal:110,p:23,c:0,g:1.5
+  },
+
+  pavo:{
+    nombre:"Pechuga de pavo",
+    categoria:"proteina",
+    kcal:105,p:24,c:0,g:1
+  },
+
+  ternera:{
+    nombre:"Ternera magra",
+    categoria:"proteina",
+    kcal:145,p:21,c:0,g:6
+  },
+
+  cerdo:{
+    nombre:"Lomo de cerdo",
+    categoria:"proteina",
+    kcal:150,p:22,c:0,g:6
+  },
+
+  merluza:{
+    nombre:"Merluza",
+    categoria:"proteina",
+    kcal:80,p:18,c:0,g:1.5
+  },
+
+  bacalao:{
+    nombre:"Bacalao",
+    categoria:"proteina",
+    kcal:82,p:18,c:0,g:.7
+  },
+
+  atun:{
+    nombre:"Atún al natural",
+    categoria:"proteina",
+    kcal:116,p:26,c:0,g:1
+  },
+
+  salmon:{
+    nombre:"Salmón",
+    categoria:"proteina",
+    kcal:205,p:20,c:0,g:13
+  },
+
+  pescado_blanco:{
+    nombre:"Pescado blanco",
+    categoria:"proteina",
+    kcal:90,p:19,c:0,g:2
+  },
+
+  gambas:{
+    nombre:"Gambas",
+    categoria:"proteina",
+    kcal:99,p:24,c:.2,g:.3
+  },
+
+  huevos:{
+    nombre:"Huevos",
+    categoria:"proteina_huevo",
+    kcal:72,p:6.3,c:.4,g:4.8,
+    unidad:true
+  },
+
+  claras:{
+    nombre:"Claras de huevo",
+    categoria:"proteina",
+    kcal:52,p:11,c:.7,g:.2
+  },
+
+  jamon_serrano:{
+    nombre:"Jamón serrano",
+    categoria:"proteina",
+    kcal:240,p:31,c:0,g:13
+  },
+
+  lomo_embuchado:{
+    nombre:"Lomo embuchado",
+    categoria:"proteina",
+    kcal:200,p:40,c:0,g:8
+  },
+
+  queso_fresco:{
+    nombre:"Queso fresco",
+    categoria:"proteina",
+    kcal:150,p:12,c:3,g:10
+  },
+
+  yogur_proteico:{
+    nombre:"Yogur alto en proteína",
+    categoria:"proteina",
+    kcal:70,p:10,c:4,g:1
+  },
+
+  requeson:{
+    nombre:"Requesón",
+    categoria:"proteina",
+    kcal:98,p:11,c:3,g:4
+  },
+
+  /* GRASAS */
+
+  aceite_oliva:{
+    nombre:"Aceite de oliva",
+    categoria:"grasa",
+    kcal:884,p:0,c:0,g:100
+  },
+
+  mantequilla:{
+    nombre:"Mantequilla",
+    categoria:"grasa",
+    kcal:717,p:.9,c:.1,g:81
+  },
+
+  aguacate:{
+    nombre:"Aguacate",
+    categoria:"grasa",
+    kcal:160,p:2,c:8.5,g:15
+  },
+
+  /* VERDURAS */
+
+  brocoli:{
+    nombre:"Brócoli",
+    categoria:"verdura",
+    kcal:34,p:2.8,c:7,g:.4
+  },
+
+  calabacin:{
+    nombre:"Calabacín",
+    categoria:"verdura",
+    kcal:17,p:1.2,c:3.1,g:.3
+  },
+
+  berenjena:{
+    nombre:"Berenjena",
+    categoria:"verdura",
+    kcal:25,p:1,c:6,g:.2
+  },
+
+  judias_verdes:{
+    nombre:"Judías verdes",
+    categoria:"verdura",
+    kcal:31,p:1.8,c:4.5,g:.2
+  },
+
+  esparragos:{
+    nombre:"Espárragos",
+    categoria:"verdura",
+    kcal:20,p:2.2,c:3.9,g:.1
+  },
+
+  pimiento:{
+    nombre:"Pimiento",
+    categoria:"verdura",
+    kcal:31,p:1,c:6,g:.3
+  },
+
+  espinacas:{
+    nombre:"Espinacas",
+    categoria:"verdura",
+    kcal:23,p:2.9,c:3.6,g:.4
+  },
+
+  champinones:{
+    nombre:"Champiñones",
+    categoria:"verdura",
+    kcal:22,p:3.1,c:3.3,g:.3
+  },
+
+  ensalada:{
+    nombre:"Ensalada variada",
+    categoria:"verdura",
+    kcal:25,p:1.5,c:4,g:.3
+  },
+
+  pisto:{
+    nombre:"Pisto de verduras",
+    categoria:"verdura",
+    kcal:55,p:1.5,c:7,g:2
+  },
+
+  verduras_salteeadas:{
+    nombre:"Verduras salteadas",
+    categoria:"verdura",
+    kcal:55,p:2,c:7,g:2
+  },
+
+  verdura_libre:{
+    nombre:"Verdura libre",
+    categoria:"verdura",
+    kcal:30,p:2,c:5,g:.3
+  },
+
+  /* FRUTAS */
+
+  manzana:{
+    nombre:"Manzana",
+    categoria:"fruta",
+    kcal:52,p:.3,c:14,g:.2
+  },
+
+  platano:{
+    nombre:"Plátano",
+    categoria:"fruta",
+    kcal:89,p:1.1,c:23,g:.3
+  },
+
+  naranja:{
+    nombre:"Naranja",
+    categoria:"fruta",
+    kcal:47,p:.9,c:12,g:.1
+  },
+
+  pera:{
+    nombre:"Pera",
+    categoria:"fruta",
+    kcal:57,p:.4,c:15,g:.1
+  },
+
+  kiwi:{
+    nombre:"Kiwi",
+    categoria:"fruta",
+    kcal:61,p:1.1,c:15,g:.5
+  },
+
+  fresas:{
+    nombre:"Fresas",
+    categoria:"fruta",
+    kcal:32,p:.7,c:7.7,g:.3
+  },
+
+  melocoton:{
+    nombre:"Melocotón",
+    categoria:"fruta",
+    kcal:39,p:.9,c:9.5,g:.3
+  },
+
+  uvas:{
+    nombre:"Uvas",
+    categoria:"fruta",
+    kcal:69,p:.7,c:18,g:.2
+  },
+
+  piña:{
+    nombre:"Piña",
+    categoria:"fruta",
+    kcal:50,p:.5,c:13,g:.1
+  },
+
+  arandanos:{
+    nombre:"Arándanos",
+    categoria:"fruta",
+    kcal:57,p:.7,c:14,g:.3
+  }
+
+};
+
+
+/* =========================================================
+   LISTAS DE OPCIONES
+========================================================= */
+
+const carbohidratos = [
+  "pan",
+  "pan_integral",
+  "arroz",
+  "pasta",
+  "patata",
+  "boniato",
+  "avena",
+  "quinoa",
+  "couscous",
+  "tortitas_arroz",
+  "legumbres"
+];
+
+const proteinas = [
+  "pollo",
+  "pavo",
+  "ternera",
+  "cerdo",
+  "merluza",
+  "bacalao",
+  "atun",
+  "salmon",
+  "pescado_blanco",
+  "gambas",
+  "huevos",
+  "claras",
+  "jamon_serrano",
+  "lomo_embuchado",
+  "queso_fresco",
+  "yogur_proteico",
+  "requeson"
+];
+
+const proteinasDesayuno = [
+  "huevos",
+  "claras",
+  "pavo",
+  "jamon_serrano",
+  "lomo_embuchado",
+  "atun",
+  "queso_fresco",
+  "yogur_proteico",
+  "requeson"
+];
+
+const grasas = [
+  "aceite_oliva",
+  "mantequilla",
+  "aguacate"
+];
+
+const verduras = [
+  "verdura_libre",
+  "brocoli",
+  "calabacin",
+  "berenjena",
+  "judias_verdes",
+  "esparragos",
+  "pimiento",
+  "espinacas",
+  "champinones",
+  "ensalada",
+  "pisto",
+  "verduras_salteeadas"
+];
+
+const frutas = [
+  "manzana",
+  "platano",
+  "naranja",
+  "pera",
+  "kiwi",
+  "fresas",
+  "melocoton",
+  "uvas",
+  "piña",
+  "arandanos"
+];
+
+
+/* =========================================================
+   ESTADO DE LOS MENÚS
+========================================================= */
+
+const menuDias = [
+  {nombre:"Lunes"},
+  {nombre:"Martes"},
+  {nombre:"Miércoles"},
+  {nombre:"Jueves"},
+  {nombre:"Viernes"},
+  {nombre:"Sábado"},
+  {nombre:"Domingo"}
+];
+
+let elecciones = crearEleccionesIniciales();
+
+function crearEleccionesIniciales(){
+
+  return {
+    desayuno:{
+      proteina:"huevos",
+      proteinaCantidad:3,
+      carbo:"pan",
+      carboCantidad:80,
+      fruta:"manzana",
+      frutaCantidad:150
+    },
+
+    comida:{
+      proteina:"pollo",
+      proteinaCantidad:200,
+      carbo:"arroz",
+      carboCantidad:70,
+      grasa:"aceite_oliva",
+      grasaCantidad:5,
+      verdura:"brocoli",
+      verduraCantidad:150
+    },
+
+    cena:{
+      proteina:"merluza",
+      proteinaCantidad:250,
+      carbo:"patata",
+      carboCantidad:400,
+      grasa:"aceite_oliva",
+      grasaCantidad:5,
+      verdura:"verdura_libre",
+      verduraCantidad:150
+    }
+  };
+
+}
+
+
+/* =========================================================
+   FUNCIONES GENERALES
+========================================================= */
+
+function numero(valor, defecto=0){
+
+  const n=parseFloat(valor);
+
+  return Number.isFinite(n) ? n : defecto;
+
+}
+
+
+function guardarConfiguracion(){
+
+  localStorage.setItem(
+    STORAGE_SETTINGS,
+    JSON.stringify(config)
+  );
+
+}
+
+
+function calcularItem(id,cantidad){
+
+  const a=alimentos[id];
+
+  if(!a){
+    return {kcal:0,p:0,c:0,g:0};
+  }
+
+  const q=numero(cantidad,0);
+
+  if(a.unidad){
+
+    return {
+      kcal:a.kcal*q,
+      p:a.p*q,
+      c:a.c*q,
+      g:a.g*q
+    };
+
+  }
+
+  return {
+    kcal:a.kcal*q/100,
+    p:a.p*q/100,
+    c:a.c*q/100,
+    g:a.g*q/100
+  };
+
+}
+
+
+function sumar(a,b){
+
+  return {
+    kcal:a.kcal+b.kcal,
+    p:a.p+b.p,
+    c:a.c+b.c,
+    g:a.g+b.g
+  };
+
+}
+
+
+function totalItems(items){
+
+  let total={
+    kcal:0,
+    p:0,
+    c:0,
+    g:0
+  };
+
+  items.forEach(item=>{
+    total=sumar(
+      total,
+      calcularItem(item[0],item[1])
+    );
+  });
+
+  return total;
+
+}
+
+
+function opciones(lista,seleccionado){
+
+  return lista.map(id=>{
+
+    const seleccionadoHTML =
+      id===seleccionado ? "selected" : "";
+
+    return `
+      <option value="${id}" ${seleccionadoHTML}>
+        ${alimentos[id].nombre}
+      </option>
+    `;
+
+  }).join("");
+
+}
+
+
+/* =========================================================
+   PERFIL Y GASTO ENERGÉTICO
+========================================================= */
+
+function calcularBasal(){
+
+  if(!perfil){
+    return 0;
+  }
+
+  if(numero(perfil.restCalories,0)>0){
+
+    return numero(perfil.restCalories);
+
+  }
+
+  const peso=numero(perfil.weight);
+  const altura=numero(perfil.height);
+  const edad=numero(perfil.age);
+
+  if(
+    peso<=0 ||
+    altura<=0 ||
+    edad<=0
+  ){
+    return 0;
+  }
+
+  if(perfil.sex==="hombre"){
+
+    return 10*peso+
+           6.25*altura-
+           5*edad+
+           5;
+
+  }
+
+  return 10*peso+
+         6.25*altura-
+         5*edad-
+         161;
+
+}
+
+
+function calcularMantenimiento(){
+
+  const basal=calcularBasal();
+
+  if(basal<=0){
+    return 0;
+  }
+
+  const factor=numero(
+    config.activityLevel,
+    1.5
+  );
+
+  let mantenimiento=basal*factor;
+
+  const activas=numero(
+    config.activeCalories,
+    0
+  );
+
+  /*
+    Las calorías activas del reloj son opcionales.
+    Para evitar doble contabilización, solo añadimos
+    una parte conservadora cuando se introducen.
+  */
+
+  if(activas>0){
+
+    mantenimiento =
+      basal +
+      (basal*(factor-1)) +
+      (activas*0.5);
+
+  }
+
+  return mantenimiento;
+
+}
+
+
+function calcularObjetivoKcal(){
+
+  const mantenimiento=calcularMantenimiento();
+
+  if(mantenimiento<=0){
+    return 0;
+  }
+
+  const deficit=numero(
+    config.deficit,
+    15
+  );
+
+  return mantenimiento*(1-deficit/100);
+
+}
+
+
+function calcularMacros(){
+
+  const kcal=calcularObjetivoKcal();
+
+  if(kcal<=0){
+
+    return {
+      kcal:0,
+      p:0,
+      g:0,
+      c:0
+    };
+
+  }
+
+  const peso=numero(
+    perfil?.weight,
+    70
+  );
+
+  /*
+    Proteína:
+    1.8 g/kg como punto de partida.
+  */
+
+  let p=peso*1.8;
+
+  /*
+    Límite práctico para evitar cifras absurdas
+    en pesos muy elevados.
+  */
+
+  p=Math.max(1,p);
+
+  /*
+    Grasa:
+    0.8 g/kg.
+  */
+
+  let g=peso*.8;
+
+  /*
+    Evitamos que la grasa sea inferior a aproximadamente
+    el 20% de las calorías objetivo.
+  */
+
+  const grasaMinimaPorKcal=
+    (kcal*.20)/9;
+
+  g=Math.max(g,grasaMinimaPorKcal);
+
+  const caloriasProteina=p*4;
+  const caloriasGrasa=g*9;
+
+  let c=
+    (kcal-
+     caloriasProteina-
+     caloriasGrasa)/4;
+
+  /*
+    Si el objetivo es demasiado bajo para mantener
+    el reparto calculado, reducimos proteína y grasa
+    proporcionalmente antes de permitir hidratos negativos.
+  */
+
+  if(c<0){
+
+    const disponible=kcal;
+
+    g=Math.min(
+      g,
+      (disponible*.30)/9
+    );
+
+    p=Math.min(
+      p,
+      (disponible*.35)/4
+    );
+
+    c=Math.max(
+      0,
+      (kcal-p*4-g*9)/4
+    );
+
+  }
+
+  return {
+    kcal:Math.round(kcal),
+    p:Math.round(p),
+    g:Math.round(g),
+    c:Math.round(c)
+  };
+
+}
+
+
+function actualizarCalculoEnergetico(){
+
+  config.activityLevel=
+    numero(
+      document.getElementById("activityLevel")?.value,
+      1.5
+    );
+
+  config.activeCalories=
+    numero(
+      document.getElementById("activeCalories")?.value,
+      0
+    );
+
+  guardarConfiguracion();
+
+  renderObjetivos();
+
+}
+
+
+function cambiarDeficit(){
+
+  config.deficit=
+    numero(
+      document.getElementById("deficitSelect").value,
+      15
+    );
+
+  guardarConfiguracion();
+
+  renderObjetivos();
+
+}
+
+
+function renderObjetivos(){
+
+  const basal=calcularBasal();
+  const mantenimiento=calcularMantenimiento();
+  const objetivo=calcularObjetivoKcal();
+  const macros=calcularMacros();
+
+  const calorieSummary=
+    document.getElementById("calorieSummary");
+
+  const energyDetails=
+    document.getElementById("energyDetails");
+
+  const macroSummary=
+    document.getElementById("macroSummary");
+
+  if(!perfil){
+
+    calorieSummary.innerHTML=`
+      <div class="notice warn">
+        👤 Primero introduce tus datos personales.
+      </div>
+    `;
+
+    energyDetails.innerHTML="";
+
+    macroSummary.innerHTML="";
+
+    return;
+
+  }
+
+  calorieSummary.innerHTML=`
+
+    <div class="grid">
+
+      <div class="macro">
+        <b>${Math.round(basal)}</b>
+        kcal
+        <br>reposo
+      </div>
+
+      <div class="macro">
+        <b>${Math.round(mantenimiento)}</b>
+        kcal
+        <br>mantenimiento
+      </div>
+
+      <div class="macro">
+        <b>${Math.round(objetivo)}</b>
+        kcal
+        <br>objetivo
+      </div>
+
+      <div class="macro">
+        <b>${config.deficit}%</b>
+        déficit
+        <br>estimado
+      </div>
+
+    </div>
+
+  `;
+
+  energyDetails.innerHTML=`
+
+    <div class="notice ok">
+
+      🔥 <b>Gasto diario estimado:</b>
+      ${Math.round(mantenimiento)} kcal
+
+      <br><br>
+
+      🛌 Metabolismo en reposo:
+      ${Math.round(basal)} kcal
+
+      <br>
+
+      🚶 Actividad y movimiento:
+      aproximadamente
+      ${Math.max(
+        0,
+        Math.round(mantenimiento-basal)
+      )} kcal
+
+    </div>
+
+  `;
+
+  macroSummary.innerHTML=`
+
+    <div class="grid">
+
+      <div class="macro">
+        <b>${macros.kcal}</b>
+        kcal
+      </div>
+
+      <div class="macro">
+        <b>${macros.p} g</b>
+        proteína
+      </div>
+
+      <div class="macro">
+        <b>${macros.c} g</b>
+        hidratos
+      </div>
+
+      <div class="macro">
+        <b>${macros.g} g</b>
+        grasa
+      </div>
+
+    </div>
+
+    <div class="notice info">
+
+      🧮 Los macronutrientes se calculan
+      automáticamente a partir del peso y del
+      objetivo energético.
+
+      <br><br>
+
+      🥩 Proteína aproximada:
+      1,8 g/kg.
+
+      <br>
+
+      🥑 Grasas:
+      alrededor de 0,8 g/kg, con un mínimo
+      energético razonable.
+
+      <br>
+
+      🍚 El resto de las calorías se completa
+      con hidratos de carbono.
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   PERFIL
+========================================================= */
+
+function mostrarPerfil(){
+
+  document.getElementById(
+    "profileModal"
+  ).classList.remove("hidden");
+
+  if(perfil){
+
+    document.getElementById("profileSex").value=
+      perfil.sex || "hombre";
+
+    document.getElementById("profileAge").value=
+      perfil.age || "";
+
+    document.getElementById("profileWeight").value=
+      perfil.weight || "";
+
+    document.getElementById("profileHeight").value=
+      perfil.height || "";
+
+    document.getElementById("profileRestCalories").value=
+      perfil.restCalories || "";
+
+  }
+
+}
+
+
+function cerrarPerfil(){
+
+  document.getElementById(
+    "profileModal"
+  ).classList.add("hidden");
+
+}
+
+
+function guardarPerfil(){
+
+  const sex=
+    document.getElementById("profileSex").value;
+
+  const age=
+    numero(
+      document.getElementById("profileAge").value,
+      0
+    );
+
+  const weight=
+    numero(
+      document.getElementById("profileWeight").value,
+      0
+    );
+
+  const height=
+    numero(
+      document.getElementById("profileHeight").value,
+      0
+    );
+
+  const restCalories=
+    numero(
+      document.getElementById("profileRestCalories").value,
+      0
+    );
+
+  if(
+    age<14 ||
+    age>100 ||
+    weight<30 ||
+    height<120
+  ){
+
+    alert(
+      "Revisa edad, peso y altura."
+    );
+
+    return;
+
+  }
+
+  perfil={
+    sex,
+    age,
+    weight,
+    height,
+    restCalories
+  };
+
+  localStorage.setItem(
+    STORAGE_PROFILE,
+    JSON.stringify(perfil)
+  );
+
+  cerrarPerfil();
+
+  render();
+
+}
+
+
+function renderPerfil(){
+
+  const box=
+    document.getElementById("profileSummary");
+
+  if(!perfil){
+
+    box.innerHTML=`
+
+      <div class="notice warn">
+
+        Para comenzar introduce sexo, edad,
+        peso y altura.
+
+      </div>
+
+      <button
+        style="margin-top:8px"
+        onclick="mostrarPerfil()"
+      >
+        Introducir datos
+      </button>
+
+    `;
+
+    return;
+
+  }
+
+  const basal=Math.round(
+    calcularBasal()
+  );
+
+  box.innerHTML=`
+
+    <div class="profile-box">
+
+      <div class="info-line">
+        Sexo
+        <b>${perfil.sex==="hombre"?"Hombre":"Mujer"}</b>
+      </div>
+
+      <div class="info-line">
+        Edad
+        <b>${perfil.age} años</b>
+      </div>
+
+      <div class="info-line">
+        Peso
+        <b>${perfil.weight} kg</b>
+      </div>
+
+      <div class="info-line">
+        Altura
+        <b>${perfil.height} cm</b>
+      </div>
+
+      <div class="info-line">
+        Reposo estimado
+        <b>${basal} kcal</b>
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   CONSTRUCCIÓN DE SELECTS
+========================================================= */
+
+function selectAlimento(
+  lista,
+  seleccionado,
+  onchange
+){
+
+  return `
+    <select onchange="${onchange}">
+      ${opciones(lista,seleccionado)}
+    </select>
+  `;
+
+}
+
+
+/* =========================================================
+   DESAYUNO
+========================================================= */
+
+function construirDesayuno(){
+
+  const e=elecciones.desayuno;
+
+  return `
+
+    <div class="card">
+
+      <h2>🍳 Desayuno</h2>
+
+      <p class="small">
+        Elige una fuente de proteína,
+        una de carbohidratos y una fruta.
+        Las cantidades se pueden ajustar.
+      </p>
+
+      <div class="food-block">
+
+        <h3>🥩 Proteína</h3>
+
+        ${selectAlimento(
+          proteinasDesayuno,
+          e.proteina,
+          "elecciones.desayuno.proteina=this.value;render()"
+        )}
+
+        <div class="quantity-row">
+
+          <div class="recommendation">
+            Cantidad
+          </div>
+
+          <input
+            class="quantity-input"
+            type="number"
+            step="1"
+            min="0"
+            value="${e.proteinaCantidad}"
+            onchange="
+              elecciones.desayuno.proteinaCantidad=numero(this.value,0);
+              render();
+            "
+          >
+
+        </div>
+
+        <button
+          class="adjust"
+          onclick="ajustarBloque('desayuno','proteina')"
+        >
+          ⚙️ Ajustar proteína
+        </button>
+
+      </div>
+
+
+      <div class="food-block">
+
+        <h3>🍚 Carbohidrato</h3>
+
+        ${selectAlimento(
+          carbohidratos,
+          e.carbo,
+          "elecciones.desayuno.carbo=this.value;render()"
+        )}
+
+        <div class="quantity-row">
+
+          <div class="recommendation">
+            Cantidad
+          </div>
+
+          <input
+            class="quantity-input"
+            type="number"
+            step="1"
+            min="0"
+            value="${e.carboCantidad}"
+            onchange="
+              elecciones.desayuno.carboCantidad=numero(this.value,0);
+              render();
+            "
+          >
+
+        </div>
+
+        <button
+          class="adjust"
+          onclick="ajustarBloque('desayuno','carbo')"
+        >
+          ⚙️ Ajustar hidratos
+        </button>
+
+      </div>
+
+
+      <div class="food-block">
+
+        <h3>🍎 Fruta</h3>
+
+        ${selectAlimento(
+          frutas,
+          e.fruta,
+          "elecciones.desayuno.fruta=this.value;render()"
+        )}
+
+        <div class="quantity-row">
+
+          <div class="recommendation">
+            Cantidad orientativa
+          </div>
+
+          <input
+            class="quantity-input"
+            type="number"
+            step="1"
+            min="0"
+            value="${e.frutaCantidad}"
+            onchange="
+              elecciones.desayuno.frutaCantidad=numero(this.value,150);
+              render();
+            "
+          >
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   COMIDA Y CENA
+========================================================= */
+
+function construirComidaCena(
+  tipo,
+  titulo
+){
+
+  const e=elecciones[tipo];
+
+  return `
+
+    <div class="card">
+
+      <h2>${titulo}</h2>
+
+      <div class="food-block">
+
+        <h3>🥩 Fuente de proteína</h3>
+
+        ${selectAlimento(
+          proteinas,
+          e.proteina,
+          `elecciones.${tipo}.proteina=this.value;render()`
+        )}
+
+        <div class="quantity-row">
+
+          <div class="recommendation">
+            Cantidad calculada
+          </div>
+
+          <input
+            class="quantity-input"
+            type="number"
+            step="1"
+            min="0"
+            value="${e.proteinaCantidad}"
+            onchange="
+              elecciones.${tipo}.proteinaCantidad=numero(this.value,0);
+              render();
+            "
+          >
+
+        </div>
+
+        <button
+          class="adjust"
+          onclick="ajustarBloque('${tipo}','proteina')"
+        >
+          ⚙️ Ajustar proteína
+        </button>
+
+      </div>
+
+
+      <div class="food-block">
+
+        <h3>🍚 Fuente de carbohidratos</h3>
+
+        ${selectAlimento(
+          carbohidratos,
+          e.carbo,
+          `elecciones.${tipo}.carbo=this.value;render()`
+        )}
+
+        <div class="quantity-row">
+
+          <div class="recommendation">
+            Cantidad calculada
+          </div>
+
+          <input
+            class="quantity-input"
+            type="number"
+            step="1"
+            min="0"
+            value="${e.carboCantidad}"
+            onchange="
+              elecciones.${tipo}.carboCantidad=numero(this.value,0);
+              render();
+            "
+          >
+
+        </div>
+
+        <button
+          class="adjust"
+          onclick="ajustarBloque('${tipo}','carbo')"
+        >
+          ⚙️ Ajustar hidratos
+        </button>
+
+      </div>
+
+
+      <div class="food-block">
+
+        <h3>🥑 Fuente de grasa</h3>
+
+        ${selectAlimento(
+          grasas,
+          e.grasa,
+          `elecciones.${tipo}.grasa=this.value;render()`
+        )}
+
+        <div class="quantity-row">
+
+          <div class="recommendation">
+            Cantidad orientativa
+          </div>
+
+          <input
+            class="quantity-input"
+            type="number"
+            step="1"
+            min="0"
+            value="${e.grasaCantidad}"
+            onchange="
+              elecciones.${tipo}.grasaCantidad=numero(this.value,5);
+              render();
+            "
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="food-block">
+
+        <h3>🥦 Verdura</h3>
+
+        ${selectAlimento(
+          verduras,
+          e.verdura,
+          `elecciones.${tipo}.verdura=this.value;render()`
+        )}
+
+        <div class="quantity-row">
+
+          <div class="recommendation">
+            Aproximadamente 150 g
+          </div>
+
+          <input
+            class="quantity-input"
+            type="number"
+            step="1"
+            min="0"
+            value="${e.verduraCantidad}"
+            onchange="
+              elecciones.${tipo}.verduraCantidad=numero(this.value,150);
+              render();
+            "
+          >
+
+        </div>
+
+        <div class="notice info">
+
+          🥦 La verdura es flexible y no se utiliza
+          como principal herramienta para ajustar
+          las calorías del día.
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   CÁLCULO DE TODA LA DIETA
+========================================================= */
+
+function construirItemsDia(){
+
+  const items=[];
+
+  const b=elecciones.desayuno;
+
+  items.push([
+    b.proteina,
+    b.proteinaCantidad
+  ]);
+
+  items.push([
+    b.carbo,
+    b.carboCantidad
+  ]);
+
+  items.push([
+    b.fruta,
+    b.frutaCantidad
+  ]);
+
+
+  ["comida","cena"].forEach(tipo=>{
+
+    const e=elecciones[tipo];
+
+    items.push([
+      e.proteina,
+      e.proteinaCantidad
+    ]);
+
+    items.push([
+      e.carbo,
+      e.carboCantidad
+    ]);
+
+    items.push([
+      e.grasa,
+      e.grasaCantidad
+    ]);
+
+    items.push([
+      e.verdura,
+      e.verduraCantidad
+    ]);
+
+  });
+
+  return items;
+
+}
+
+
+function construirTotal(){
+
+  return totalItems(
+    construirItemsDia()
+  );
+
+}
+
+
+/* =========================================================
+   AJUSTE DE CANTIDADES
+========================================================= */
+
+/*
+  Esta función sustituye la lógica defectuosa de la versión anterior.
+
+  No depende de cambiar primero de alimento.
+
+  Al pulsar el botón:
+  1. toma el alimento seleccionado,
+  2. calcula qué cantidad aporta el macro objetivo,
+  3. actualiza directamente la cantidad,
+  4. renderiza la pantalla.
+*/
+
+function ajustarBloque(
+  tipo,
+  bloque
+){
+
+  const e=elecciones[tipo];
+
+  if(!e){
+    return;
+  }
+
+  const objetivo=calcularMacros();
+
+  if(
+    !objetivo ||
+    objetivo.kcal<=0
+  ){
+
+    alert(
+      "Primero introduce tus datos personales para calcular los objetivos."
+    );
+
+    return;
+
+  }
+
+
+  /* =====================================================
+     AJUSTE DE PROTEÍNA
+  ===================================================== */
+
+  if(bloque==="proteina"){
+
+    const alimento=e.proteina;
+    const datos=alimentos[alimento];
+
+    if(!datos || datos.p<=0){
+
+      alert(
+        "Este alimento no permite calcular una cantidad de proteína."
+      );
+
+      return;
+
+    }
+
+
+    /*
+      Primero calculamos aproximadamente qué cantidad
+      necesitamos para aportar una fracción razonable
+      del objetivo proteico.
+
+      Como hay tres comidas principales, usamos:
+      desayuno 25%
+      comida 40%
+      cena 35%
+    */
+
+    let proporcion=.4;
+
+    if(tipo==="desayuno"){
+      proporcion=.25;
+    }
+
+    if(tipo==="cena"){
+      proporcion=.35;
+    }
+
+    const proteinaObjetivo=
+      objetivo.p*proporcion;
+
+    let cantidad;
+
+    if(datos.unidad){
+
+      cantidad=
+        Math.max(
+          1,
+          Math.round(
+            proteinaObjetivo/datos.p
+          )
+        );
+
+    }else{
+
+      cantidad=
+        Math.max(
+          10,
+          Math.round(
+            proteinaObjetivo*100/datos.p
+          )
+        );
+
+    }
+
+    e.proteinaCantidad=cantidad;
+
+  }
+
+
+  /* =====================================================
+     AJUSTE DE CARBOHIDRATOS
+  ===================================================== */
+
+  if(bloque==="carbo"){
+
+    const alimento=e.carbo;
+    const datos=alimentos[alimento];
+
+    if(!datos || datos.c<=0){
+
+      alert(
+        "Este alimento no permite calcular una cantidad de hidratos."
+      );
+
+      return;
+
+    }
+
+
+    /*
+      Reparto aproximado de los hidratos:
+      desayuno 25%
+      comida 40%
+      cena 35%
+    */
+
+    let proporcion=.4;
+
+    if(tipo==="desayuno"){
+      proporcion=.25;
+    }
+
+    if(tipo==="cena"){
+      proporcion=.35;
+    }
+
+    const hidratosObjetivo=
+      objetivo.c*proporcion;
+
+    let cantidad=
+      Math.max(
+        10,
+        Math.round(
+          hidratosObjetivo*100/datos.c
+        )
+      );
+
+    e.carboCantidad=cantidad;
+
+  }
+
+
+  render();
+
+}
+
+
+/* =========================================================
+   RESUMEN
+========================================================= */
+
+function renderResumen(){
+
+  const total=construirTotal();
+  const objetivo=calcularMacros();
+
+  const problemas=[];
+
+  if(total.kcal>objetivo.kcal+50){
+    problemas.push("calorías");
+  }
+
+  if(total.p>objetivo.p+10){
+    problemas.push("proteína");
+  }
+
+  if(total.c>objetivo.c+15){
+    problemas.push("hidratos");
+  }
+
+  if(total.g>objetivo.g+10){
+    problemas.push("grasas");
+  }
+
+  let estado="ok";
+
+  if(problemas.length){
+    estado="bad";
+  }
+
+  const kcalDiferencia=
+    Math.round(
+      total.kcal-objetivo.kcal
+    );
+
+  document.getElementById(
+    "summary"
+  ).innerHTML=`
+
+    <div class="grid">
+
+      <div class="macro">
+        <b>${Math.round(total.kcal)}</b>
+        / ${objetivo.kcal} kcal
+      </div>
+
+      <div class="macro">
+        <b>${Math.round(total.p)} g</b>
+        / ${objetivo.p} g
+        proteína
+      </div>
+
+      <div class="macro">
+        <b>${Math.round(total.c)} g</b>
+        / ${objetivo.c} g
+        hidratos
+      </div>
+
+      <div class="macro">
+        <b>${Math.round(total.g)} g</b>
+        / ${objetivo.g} g
+        grasa
+      </div>
+
+    </div>
+
+    <div class="notice ${estado}">
+
+      ${
+        problemas.length
+        ?
+        `⚠️ El menú supera ligeramente
+        el objetivo de: ${problemas.join(", ")}.`
+        :
+        `🟢 El menú está dentro de los objetivos
+        establecidos.`
+      }
+
+      <br><br>
+
+      Diferencia energética:
+      <b>${kcalDiferencia>0?"+":""}${kcalDiferencia} kcal</b>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   SEMANA
+========================================================= */
+
+function renderDias(){
+
+  document.getElementById(
+    "days"
+  ).innerHTML=
+
+    menuDias.map(
+      (dia,index)=>`
+
+        <button
+          class="${index===diaActual?"active":""}"
+          onclick="cambiarDia(${index})"
+        >
+          ${dia.nombre}
+        </button>
+
+      `
+    ).join("");
+
+}
+
+
+function cambiarDia(index){
+
+  diaActual=index;
+
+  /*
+    Cada día empieza con una configuración
+    independiente basada en la anterior.
+    Esto permite modificar el menú sin afectar
+    accidentalmente a los demás días.
+  */
+
+  elecciones=crearEleccionesIniciales();
+
+  render();
+
+}
+
+
+/* =========================================================
+   PESO
+========================================================= */
+
+function guardarPeso(){
+
+  const input=
+    document.getElementById(
+      "inputWeight"
+    );
+
+  const peso=
+    numero(input.value,0);
+
+  if(
+    peso<=0 ||
+    peso>300
+  ){
+
+    alert(
+      "Introduce un peso válido."
+    );
+
+    return;
+
+  }
+
+  const fecha=
+    new Date()
+      .toISOString()
+      .split("T")[0];
+
+  /*
+    Si ya existe un registro del mismo día,
+    lo sustituimos en vez de duplicarlo.
+  */
+
+  historialPesos=
+    historialPesos.filter(
+      x=>x.fecha!==fecha
+    );
+
+  historialPesos.unshift({
+    fecha,
+    peso
+  });
+
+  localStorage.setItem(
+    STORAGE_WEIGHT,
+    JSON.stringify(historialPesos)
+  );
+
+  input.value="";
+
+  renderPeso();
+
+}
+
+
+function limpiarPesos(){
+
+  if(
+    !confirm(
+      "¿Seguro que quieres borrar todo el historial de peso?"
+    )
+  ){
+    return;
+  }
+
+  historialPesos=[];
+
+  localStorage.removeItem(
+    STORAGE_WEIGHT
+  );
+
+  renderPeso();
+
+}
+
+
+function calcularMediasSemanales(){
+
+  if(
+    !historialPesos.length
+  ){
+    return [];
+  }
+
+  const semanas={};
+
+  [...historialPesos]
+    .reverse()
+    .forEach(item=>{
+
+      const fecha=
+        new Date(
+          item.fecha+"T12:00:00"
+        );
+
+      /*
+        Semana ISO aproximada.
+      */
+
+      const temp=
+        new Date(
+          fecha.getTime()
+        );
+
+      temp.setHours(0,0,0,0);
+
+      temp.setDate(
+        temp.getDate()+
+        4-
+        (temp.getDay()||7)
+      );
+
+      const year=
+        temp.getFullYear();
+
+      const inicio=
+        new Date(
+          year,
+          0,
+          1
+        );
+
+      const semana=
+        Math.ceil(
+          (
+            (
+              (temp-inicio)/
+              86400000
+            )+
+            1
+          )/7
+        );
+
+      const clave=
+        `${year}-S${semana}`;
+
+      if(!semanas[clave]){
+        semanas[clave]=[];
+      }
+
+      semanas[clave].push(
+        numero(item.peso)
+      );
+
+    });
+
+
+  return Object.keys(semanas)
+    .sort()
+    .map(clave=>{
+
+      const valores=
+        semanas[clave];
+
+      const media=
+        valores.reduce(
+          (a,b)=>a+b,
+          0
+        )/
+        valores.length;
+
+      return {
+        semana:clave,
+        media:media
+      };
+
+    });
+
+}
+
+
+function renderPeso(){
+
+  const container=
+    document.getElementById(
+      "weightHistory"
+    );
+
+  if(!historialPesos.length){
+
+    container.innerHTML=`
+      <div
+        class="small"
+        style="padding:8px"
+      >
+        No hay pesos registrados todavía.
+      </div>
+    `;
+
+  }else{
+
+    container.innerHTML=
+      historialPesos
+        .map(
+          x=>`
+
+            <div class="weight-item">
+
+              <span>${x.fecha}</span>
+
+              <b>
+                ${numero(x.peso).toFixed(1)} kg
+              </b>
+
+            </div>
+
+          `
+        )
+        .join("");
+
+  }
+
+  dibujarGrafico();
+
+}
+
+
+/* =========================================================
+   GRÁFICO DE PESO
+========================================================= */
+
+function dibujarGrafico(){
+
+  const canvas=
+    document.getElementById(
+      "weightChart"
+    );
+
+  if(!canvas){
+    return;
+  }
+
+  const ancho=
+    canvas.offsetWidth || 350;
+
+  const alto=
+    190;
+
+  canvas.width=
+    ancho;
+
+  canvas.height=
+    alto;
+
+  const ctx=
+    canvas.getContext("2d");
+
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  const medias=
+    calcularMediasSemanales();
+
+  if(!medias.length){
+
+    ctx.fillStyle="#a0aec0";
+    ctx.font="12px sans-serif";
+
+    ctx.fillText(
+      "Registra pesos para generar la curva.",
+      20,
+      90
+    );
+
+    return;
+
+  }
+
+  const padding=30;
+
+  const w=
+    canvas.width-padding*2;
+
+  const h=
+    canvas.height-padding*2;
+
+  const valores=
+    medias.map(
+      x=>x.media
+    );
+
+  let min=
+    Math.min(...valores);
+
+  let max=
+    Math.max(...valores);
+
+  if(min===max){
+
+    min-=1;
+    max+=1;
+
+  }else{
+
+    min-=.5;
+    max+=.5;
+
+  }
+
+  ctx.strokeStyle="#20252b";
+  ctx.lineWidth=2;
+
+  ctx.beginPath();
+
+  medias.forEach(
+    (item,index)=>{
+
+      const x=
+        padding+
+        (
+          medias.length===1
+          ?
+          w/2
+          :
+          (
+            index/
+            (medias.length-1)
+          )*w
+        );
+
+      const y=
+        canvas.height-
+        padding-
+        (
+          (
+            item.media-min
+          )/
+          (max-min)
+        )*h;
+
+      if(index===0){
+        ctx.moveTo(x,y);
+      }else{
+        ctx.lineTo(x,y);
+      }
+
+      ctx.fillStyle="#20252b";
+
+      ctx.fillRect(
+        x-3,
+        y-3,
+        6,
+        6
+      );
+
+      ctx.font=
+        "10px sans-serif";
+
+      ctx.fillText(
+        item.media.toFixed(1)+" kg",
+        x-15,
+        y-8
+      );
+
+      ctx.fillStyle=
+        "#718096";
+
+      ctx.fillText(
+        item.semana,
+        x-18,
+        canvas.height-10
+      );
+
+    }
+  );
+
+  ctx.stroke();
+
+}
+
+
+/* =========================================================
+   RENDER PRINCIPAL
+========================================================= */
+
+function render(){
+
+  renderPerfil();
+
+  const deficitSelect=
+    document.getElementById(
+      "deficitSelect"
+    );
+
+  if(deficitSelect){
+
+    deficitSelect.value=
+      String(config.deficit);
+
+  }
+
+  const activity=
+    document.getElementById(
+      "activityLevel"
+    );
+
+  if(activity){
+
+    activity.value=
+      String(config.activityLevel);
+
+  }
+
+  const activeCalories=
+    document.getElementById(
+      "activeCalories"
+    );
+
+  if(activeCalories){
+
+    activeCalories.value=
+      config.activeCalories || "";
+
+  }
+
+  renderObjetivos();
+
+  renderDias();
+
+  document.getElementById(
+    "app"
+  ).innerHTML=
+
+    construirDesayuno()+
+
+    construirComidaCena(
+      "comida",
+      "🍗 Comida"
+    )+
+
+    construirComidaCena(
+      "cena",
+      "🌙 Cena"
+    );
+
+  renderResumen();
+
+  renderPeso();
+
+}
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+if(!perfil){
+
+  /*
+    Primera apertura:
+    mostramos directamente el formulario.
+  */
+
+  render();
+
+  mostrarPerfil();
+
+}else{
+
+  render();
+
+}
+
+
+window.addEventListener(
+  "resize",
+  dibujarGrafico
+);
+
+</script>
+
+</body>
+</html>
