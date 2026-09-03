@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programa Micamu79 - Completo</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f6f8;color:#18202a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+header{background:#20252b;color:white;padding:22px 16px}
+header h1{margin:0;font-size:25px}
+header p{margin:6px 0 0;font-size:13px;opacity:.8}
+main{max-width:760px;margin:auto;padding:12px}
+.card{background:white;border:1px solid #e1e4e8;border-radius:16px;padding:15px;margin:12px 0;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+h2{font-size:18px;margin:0 0 12px}
+h3{font-size:16px;margin:0 0 10px}
+.days{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+button,select,input{font:inherit}
+button,select,input{width:100%;padding:10px;border-radius:10px;border:1px solid #d9dde2;background:white}
+button{background:#20252b;color:white;font-weight:600;border:0;cursor:pointer}
+.days button{background:white;color:#18202a;border:1px solid #ddd}
+.days button.active{background:#20252b;color:white}
+.row{display:grid;grid-template-columns:1fr 88px;gap:7px;margin:7px 0}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.macro-input{background:#f1f3f5;border-radius:10px;padding:8px 4px;text-align:center;font-size:11px;color:#69717a}
+.macro-input label{display:block;font-weight:600;margin-bottom:4px;color:#18202a}
+.macro-input input{text-align:center;font-weight:bold;font-size:15px;padding:5px;background:white}
+.macro{background:#f1f3f5;border-radius:10px;padding:9px 4px;text-align:center;font-size:11px;color:#69717a}
+.macro b{display:block;font-size:16px;color:#18202a;margin-bottom:2px}
+.small{font-size:12px;color:#6b7280;line-height:1.4}
+.notice{padding:11px;border-radius:10px;margin-top:10px;font-size:13px;line-height:1.45}
+.ok{background:#edf8f1;color:#176b40}
+.warn{background:#fff6da;color:#8a6100}
+.bad{background:#ffefed;color:#a52218}
+.info{background:#ebf8ff;color:#2b6cb0}
+button.adjust{margin-top:4px}
+.weight-list{max-height:160px;overflow-y:auto;margin-top:10px;border:1px solid #eee;border-radius:8px;padding:5px}
+.weight-item{display:flex;justify-content:space-between;padding:6px 8px;font-size:13px;border-bottom:1px solid #f0f0f0}
+.weight-item:last-child{border:0}
+canvas{width:100%;height:180px;background:#fafafa;border-radius:10px;border:1px solid #eaeaea;margin-top:10px}
+footer{font-size:11px;color:#707780;padding:10px 3px 30px;line-height:1.45}
+@media(max-width:430px){
+ .grid{gap:4px}
+ .macro b, .macro-input input{font-size:13px}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Programa Micamu79</h1>
+<p>Plan nutricional con ajuste de entrenamiento y peso</p>
+</header>
+<main>
+<div class="card">
+<h2>🎯 Objetivos Diarios Base</h2>
+<div class="grid">
+ <div class="macro-input">
+  <label>Kcal</label>
+  <input id="targetKcal" type="text" value="2350" onchange="actualizarObjetivos()">
+ </div>
+ <div class="macro-input">
+  <label>Proteína (g)</label>
+  <input id="targetP" type="text" value="170" onchange="actualizarObjetivos()">
+ </div>
+ <div class="macro-input">
+  <label>Hidratos (g)</label>
+  <input id="targetC" type="text" value="230" onchange="actualizarObjetivos()">
+ </div>
+ <div class="macro-input">
+  <label>Grasa (g)</label>
+  <input id="targetG" type="text" value="70" onchange="actualizarObjetivos()">
+ </div>
+</div>
+</div>
+
+<div class="card">
+<h2>🏋️ Actividad Física / Entrenamiento</h2>
+<div class="row">
+ <select id="activityType">
+  <option value="fuerza">Entrenamiento de fuerza</option>
+  <option value="correr">Correr / Running</option>
+  <option value="bicicleta">Ciclismo / Bicicleta</option>
+  <option value="natacion">Natación</option>
+  <option value="caminar">Caminar / Caza / Senderismo</option>
+ </select>
+ <input id="activityKcal" type="number" placeholder="kcal" oninput="calcularRecargaEntreno()">
+</div>
+<div id="activityAdvice"></div>
+</div>
+
+<div class="card">
+<h2>📅 Semana</h2>
+<div id="days" class="days"></div>
+</div>
+
+<div id="app"></div>
+
+<div class="card">
+<h2>📊 Resumen del día</h2>
+<div id="summary"></div>
+</div>
+
+<div class="card">
+<h2>⚖️ Control de Peso Diario y Medias</h2>
+<p class="small">Añade tu peso cada día al levantarte. El gráfico trazará la <b>media semanal</b> para eliminar las fluctuaciones de agua.</p>
+<div class="row">
+ <input id="inputWeight" type="number" step="0.1" placeholder="Ej: 98.5">
+ <button onclick="guardarPeso()">Guardar</button>
+</div>
+
+<h3>📈 Tendencia por Semanas (Medias)</h3>
+<canvas id="weightChart"></canvas>
+
+<h3>📜 Historial de Registros</h3>
+<div id="weightHistory" class="weight-list"></div>
+<button style="margin-top:10px;background:#e53e3e" onclick="limpiarPesos()">Borrar historial de peso</button>
+</div>
+
+<footer>
+Los valores nutricionales son orientativos. Arroz, pasta y patata se consideran en crudo.
+</footer>
+</main>
+
+<script>
+let OBJETIVO = JSON.parse(localStorage.getItem('micamu_objetivos')) || {
+ kcal: 2350,
+ proteina: 170,
+ hidratos: 230,
+ grasa: 70
+};
+
+let historialPesos = JSON.parse(localStorage.getItem('micamu_pesos')) || [];
+
+function cargarObjetivosEnInputs() {
+ document.getElementById("targetKcal").value = OBJETIVO.kcal;
+ document.getElementById("targetP").value = OBJETIVO.p || OBJETIVO.proteina;
+ document.getElementById("targetC").value = OBJETIVO.c || OBJETIVO.hidratos;
+ document.getElementById("targetG").value = OBJETIVO.g || OBJETIVO.grasa;
+}
+
+function actualizarObjetivos() {
+ OBJETIVO.kcal = parseNum(document.getElementById("targetKcal").value, 2350);
+ OBJETIVO.proteina = parseNum(document.getElementById("targetP").value, 170);
+ OBJETIVO.hidratos = parseNum(document.getElementById("targetC").value, 230);
+ OBJETIVO.grasa = parseNum(document.getElementById("targetG").value, 70);
+ localStorage.setItem('micamu_objetivos', JSON.stringify(OBJETIVO));
+ render();
+}
+
+function calcularRecargaEntreno() {
+ const kcalBurned = parseFloat(document.getElementById("activityKcal").value);
+ const adviceDiv = document.getElementById("activityAdvice");
+ 
+ if (!kcalBurned || kcalBurned <= 0) {
+  adviceDiv.innerHTML = "";
+  return;
+ }
+
+ const carbsNeeded = Math.round(kcalBurned / 4);
+ const extraArroz = Math.round((carbsNeeded / 80) * 100);
+ const extraPatata = Math.round((carbsNeeded / 17) * 100);
+ const extraPlatano = Math.round(carbsNeeded / 23);
+
+ adviceDiv.innerHTML = `
+ <div class="notice info">
+  💡 <b>Recomendación Post-Entreno:</b><br>
+  Debido a las <b>${kcalBurned} kcal</b> quemadas, se recomienda consumir aprox. <b>${carbsNeeded} g adicionales de carbohidratos</b> para reponer glucógeno sin perder masa muscular.<br><br>
+  <b>Opciones para añadir a cualquier comida o como extra:</b>
+  <ul style="margin:5px 0 0;padding-left:18px">
+   <li><b>+${extraArroz} g</b> de arroz o pasta cruda.</li>
+   <li><b>+${extraPatata} g</b> de patata.</li>
+   <li><b>+${extraPlatano} ud</b> de plátano mediano.</li>
+  </ul>
+ </div>`;
+}
+
+function guardarPeso() {
+ const val = parseFloat(document.getElementById("inputWeight").value);
+ if (isNaN(val) || val <= 0) return;
+ const fecha = new Date().toISOString().split('T')[0];
+ historialPesos.unshift({ fecha, peso: val });
+ localStorage.setItem('micamu_pesos', JSON.stringify(historialPesos));
+ document.getElementById("inputWeight").value = "";
+ renderPeso();
+}
+
+function limpiarPesos() {
+ if (confirm("¿Seguro que quieres borrar todos los registros de peso?")) {
+  historialPesos = [];
+  localStorage.removeItem('micamu_pesos');
+  renderPeso();
+ }
+}
+
+function calcularMediasSemanales() {
+ if (!historialPesos.length) return [];
+ let semanas = {};
+ [...historialPesos].reverse().forEach(item => {
+  const d = new Date(item.fecha);
+  const unoEnero = new Date(d.getFullYear(),0,1);
+  const numSemana = Math.ceil((((d - unoEnero) / 86400000) + unoEnero.getDay() + 1) / 7);
+  const clave = `S${numSemana}-${d.getFullYear()}`;
+  if (!semanas[clave]) semanas[clave] = [];
+  semanas[clave].push(item.peso);
+ });
+ 
+ return Object.keys(semanas).map(s => {
+  const suma = semanas[s].reduce((a, b) => a + b, 0);
+  return { semana: s, media: (suma / semanas[s].length).toFixed(1) };
+ });
+}
+
+function renderPeso() {
+ const container = document.getElementById("weightHistory");
+ if (!historialPesos.length) {
+  container.innerHTML = "<div class='small' style='padding:8px'>No hay pesos registrados todavía.</div>";
+ } else {
+  container.innerHTML = historialPesos.map(x => 
+   `<div class="weight-item"><span>${x.fecha}</span><b>${x.peso} kg</b></div>`
+  ).join("");
+ }
+ dibujarGrafico();
+}
+
+function dibujarGrafico() {
+ const canvas = document.getElementById("weightChart");
+ const ctx = canvas.getContext("2d");
+ canvas.width = canvas.offsetWidth;
+ canvas.height = canvas.offsetHeight;
+ 
+ const medias = calcularMediasSemanales();
+ ctx.clearRect(0, 0, canvas.width, canvas.height);
+ 
+ if (medias.length < 1) {
+  ctx.fillStyle = "#a0aec0";
+  ctx.font = "12px sans-serif";
+  ctx.fillText("Registra pesos para generar la curva de medias", 20, 90);
+  return;
+ }
+
+ const padding = 30;
+ const w = canvas.width - padding * 2;
+ const h = canvas.height - padding * 2;
+ const vals = medias.map(m => parseFloat(m.media));
+ const min = Math.min(...vals) - 1;
+ const max = Math.max(...vals) + 1;
+
+ ctx.strokeStyle = "#20252b";
+ ctx.lineWidth = 2;
+ ctx.beginPath();
+
+ medias.forEach((m, i) => {
+  const x = padding + (medias.length === 1 ? w/2 : (i / (medias.length - 1)) * w);
+  const y = canvas.height - padding - ((parseFloat(m.media) - min) / (max - min)) * h;
+  
+  if (i === 0) ctx.moveTo(x, y);
+  else ctx.lineTo(x, y);
+
+  ctx.fillStyle = "#20252b";
+  ctx.fillRect(x - 3, y - 3, 6, 6);
+  ctx.font = "10px sans-serif";
+  ctx.fillText(`${m.media}kg`, x - 12, y - 8);
+  ctx.fillStyle = "#718096";
+  ctx.fillText(m.semana, x - 12, canvas.height - 10);
+ });
+ ctx.stroke();
+}
+
+const alimentos = {
+ pan: { nombre: "Pan", kcal: 250, p: 8, c: 49, g: 2 },
+ arroz: { nombre: "Arroz crudo", kcal: 360, p: 7, c: 80, g: 1 },
+ pasta: { nombre: "Pasta cruda", kcal: 350, p: 12, c: 72, g: 2 },
+ patata: { nombre: "Patata cruda", kcal: 77, p: 2, c: 17, g: .1 },
+ avena: { nombre: "Avena", kcal: 380, p: 13, c: 67, g: 7 },
+ pollo: { nombre: "Pechuga de pollo", kcal: 110, p: 23, c: 0, g: 1.5 },
+ pavo: { nombre: "Pavo", kcal: 105, p: 24, c: 0, g: 1 },
+ merluza: { nombre: "Merluza", kcal: 80, p: 18, c: 0, g: 1.5 },
+ pescado: { nombre: "Pescado blanco", kcal: 90, p: 19, c: 0, g: 2 },
+ cerdo: { nombre: "Lomo de cerdo", kcal: 150, p: 22, c: 0, g: 6 },
+ ternera: { nombre: "Ternera magra", kcal: 145, p: 21, c: 0, g: 6 },
+ salmon: { nombre: "Salmón", kcal: 205, p: 20, c: 0, g: 13 },
+ serrano: { nombre: "Jamón serrano", kcal: 240, p: 31, c: 0, g: 13 },
+ lomo: { nombre: "Lomo embuchado", kcal: 200, p: 40, c: 0, g: 8 },
+ huevo: { nombre: "Huevo", kcal: 72, p: 6.3, c: .4, g: 4.8 },
+ brocoli: { nombre: "Brócoli", kcal: 34, p: 2.8, c: 7, g: .4 },
+ verduras: { nombre: "Verduras variadas", kcal: 30, p: 2, c: 5, g: .3 },
+ calabacin: { nombre: "Calabacín", kcal: 17, p: 1.2, c: 3.1, g: .3 },
+ judias: { nombre: "Judías verdes", kcal: 31, p: 1.8, c: 4.5, g: .2 },
+ esparragos: { nombre: "Espárragos", kcal: 20, p: 2.2, c: 3.9, g: .1 },
+ aceite: { nombre: "Aceite de oliva", kcal: 884, p: 0, c: 0, g: 100 },
+ aguacate: { nombre: "Aguacate", kcal: 160, p: 2, c: 8.5, g: 15 },
+ nueces: { nombre: "Nueces", kcal: 654, p: 15, c: 14, g: 65 },
+ almendras: { nombre: "Almendras", kcal: 579, p: 21, c: 22, g: 50 },
+ chocolate: { nombre: "Chocolate negro", kcal: 600, p: 8, c: 35, g: 43 },
+ manzana: { nombre: "Manzana", kcal: 52, p: .3, c: 14, g: .2 },
+ platano: { nombre: "Plátano", kcal: 89, p: 1.1, c: 23, g: .3 },
+ naranja: { nombre: "Naranja", kcal: 47, p: .9, c: 12, g: .1 },
+ pera: { nombre: "Pera", kcal: 57, p: .4, c: 15, g: .1 },
+ kiwi: { nombre: "Kiwi", kcal: 61, p: 1.1, c: 15, g: .5 }
+};
+
+const dias = [
+{ nombre: "Lunes", desayuno: { pan: 80, proteina: "lomo" }, comida: [["pollo", 400], ["patata", 400], ["brocoli", 150], ["aceite", 5]], cena: [["salmon", 300], ["arroz", 70], ["verduras", 150]], extra: ["nueces", 20] },
+{ nombre: "Martes", desayuno: { pan: 80, proteina: "pavo" }, comida: [["pollo", 400], ["arroz", 70], ["brocoli", 150], ["aceite", 5]], cena: [["merluza", 300], ["patata", 400], ["verduras", 150], ["aceite", 5]], extra: ["aguacate", 125] },
+{ nombre: "Miércoles", desayuno: { pan: 80, proteina: "serrano" }, comida: [["cerdo", 350], ["pasta", 70], ["brocoli", 150], ["aceite", 5]], cena: [["salmon", 300], ["patata", 400], ["calabacin", 150]], extra: ["nueces", 20] },
+{ nombre: "Jueves", desayuno: { pan: 80, proteina: "lomo" }, comida: [["pollo", 400], ["arroz", 70], ["brocoli", 150], ["aceite", 5]], cena: [["merluza", 300], ["patata", 400], ["judias", 150], ["aceite", 5]], extra: ["aguacate", 125] },
+{ nombre: "Viernes", desayuno: { pan: 80, proteina: "serrano" }, comida: [["ternera", 325], ["pasta", 70], ["verduras", 150], ["aceite", 5]], cena: [["pescado", 300], ["patata", 400], ["brocoli", 150], ["aceite", 5]], extra: ["chocolate", 17] },
+{ nombre: "Sábado", desayuno: { pan: 80, proteina: "serrano" }, comida: [["pollo", 400], ["arroz", 70], ["brocoli", 150], ["aceite", 5]], cena: [["salmon", 300], ["patata", 400], ["esparragos", 150]], extra: ["almendras", 20] },
+{ nombre: "Domingo", desayuno: { pan: 100, proteina: "serrano" }, comida: [["cerdo", 350], ["pasta", 70], ["verduras", 150], ["aceite", 5]], cena: [["merluza", 300], ["patata", 400], ["brocoli", 150], ["aceite", 5]], extra: ["aguacate", 125] }
+];
+
+let diaActual = 0;
+let elecciones = { desayuno: { tipo: "normal" }, comida: {}, cena: {}, fruta: "manzana", extra: {} };
+
+const carbohidratos = ["arroz", "pasta", "patata", "pan", "avena"];
+const proteinas = ["pollo", "pavo", "merluza", "pescado", "cerdo", "ternera", "salmon"];
+const proteinasDesayuno = ["pavo", "serrano", "lomo"];
+const frutas = ["manzana", "platano", "naranja", "pera", "kiwi"];
+const grasas = ["aguacate", "nueces", "almendras", "chocolate"];
+
+function parseNum(val, fallback) {
+ const clean = String(val).replace(/[^0-9.]/g, '');
+ const num = parseFloat(clean);
+ return isNaN(num) ? fallback : num;
+}
+
+function calcularItem(id, cantidad) {
+ const a = alimentos[id];
+ if (!a) return { kcal: 0, p: 0, c: 0, g: 0 };
+ if (id === "huevo") return { kcal: a.kcal * cantidad, p: a.p * cantidad, c: a.c * cantidad, g: a.g * cantidad };
+ return { kcal: a.kcal * cantidad / 100, p: a.p * cantidad / 100, c: a.c * cantidad / 100, g: a.g * cantidad / 100 };
+}
+
+function sumar(a, b) { return { kcal: a.kcal + b.kcal, p: a.p + b.p, c: a.c + b.c, g: a.g + b.g }; }
+
+function totalItems(items) {
+ let total = { kcal: 0, p: 0, c: 0, g: 0 };
+ items.forEach(item => { total = sumar(total, calcularItem(item[0], item[1])); });
+ return total;
+}
+
+function opciones(lista, seleccionado) {
+ return lista.map(id => `<option value="${id}" ${id === seleccionado ? "selected" : ""}>${alimentos[id].nombre}</option>`).join("");
+}
+
+function reajustarProteinaSegunLimite(tipo, nuevoAlimento) {
+ const d = dias[diaActual];
+ const base = tipo === "comida" ? d.comida : d.cena;
+ const indice = base.findIndex(x => proteinas.includes(x[0]));
+ if (indice < 0) return;
+ const original = base[indice];
+ let nuevaCantidad = ((alimentos[original[0]].p * original[1] / 100) / alimentos[nuevoAlimento].p) * 100;
+ elecciones[tipo].proteina = nuevoAlimento;
+ elecciones[tipo].proteinaCantidad = Math.round(nuevaCantidad);
+
+ let limiteSeguro = false;
+ while (!limiteSeguro && nuevaCantidad > 10) {
+  elecciones[tipo].proteinaCantidad = Math.round(nuevaCantidad);
+  const total = construirTotal();
+  if (total.kcal > OBJETIVO.kcal || total.g > OBJETIVO.grasa || total.p > OBJETIVO.proteina) nuevaCantidad -= 5;
+  else limiteSeguro = true;
+ }
+ elecciones[tipo].proteinaCantidad = Math.round(nuevaCantidad);
+}
+
+function reajustarCarboSegunLimite(tipo, nuevoCarbo) {
+ const d = dias[diaActual];
+ const base = tipo === "comida" ? d.comida : d.cena;
+ const indice = base.findIndex(x => carbohidratos.includes(x[0]));
+ if (indice < 0) return;
+ const original = base[indice];
+ let nuevaCantidad = ((alimentos[original[0]].c * original[1] / 100) / alimentos[nuevoCarbo].c) * 100;
+ elecciones[tipo].carbo = nuevoCarbo;
+ elecciones[tipo].carboCantidad = Math.round(nuevaCantidad);
+
+ let limiteSeguro = false;
+ while (!limiteSeguro && nuevaCantidad > 10) {
+  elecciones[tipo].carboCantidad = Math.round(nuevaCantidad);
+  const total = construirTotal();
+  if (total.kcal > OBJETIVO.kcal || total.c > OBJETIVO.hidratos) nuevaCantidad -= 5;
+  else limiteSeguro = true;
+ }
+ elecciones[tipo].carboCantidad = Math.round(nuevaCantidad);
+}
+
+function construirDesayuno() {
+ const d = dias[diaActual];
+ const b = elecciones.desayuno;
+ if (b.tipo === "avena") {
+  return `
+  <div class="card">
+  <h2>🍳 Desayuno</h2>
+  <select onchange="elecciones.desayuno.tipo=this.value;render()">
+   <option value="normal">Versión normal</option>
+   <option value="avena" selected>Versión con avena</option>
+  </select>
+  <div class="row"><select disabled><option>Avena</option></select><input value="${b.avena||60} g" onchange="elecciones.desayuno.avena=parseNum(this.value, 60);render()"></div>
+  <div class="row"><select disabled><option>Huevos</option></select><input value="${b.huevos||2} ud" onchange="elecciones.desayuno.huevos=parseNum(this.value, 2);render()"></div>
+  <div class="row"><select onchange="elecciones.desayuno.proteina=this.value;render()">${opciones(proteinasDesayuno, b.proteina||"pavo")}</select><input value="${b.cantidad||60} g" onchange="elecciones.desayuno.cantidad=parseNum(this.value, 60);render()"></div>
+  </div>`;
+ }
+ return `
+ <div class="card">
+ <h2>🍳 Desayuno</h2>
+ <select onchange="elecciones.desayuno.tipo=this.value;render()">
+  <option value="normal" selected>Versión normal</option>
+  <option value="avena">Versión con avena</option>
+ </select>
+ <div class="row"><select disabled><option>Huevos</option></select><input disabled value="3 ud"></div>
+ <div class="row"><select disabled><option>Pan</option></select><input disabled value="${d.desayuno.pan} g"></div>
+ <div class="row"><select onchange="elecciones.desayuno.proteina=this.value;render()">${opciones(proteinasDesayuno, b.proteina||d.desayuno.proteina)}</select><input disabled value="40 g"></div>
+ </div>`;
+}
+
+function construirComidaOCena(tipo, titulo) {
+ const d = dias[diaActual];
+ const base = tipo === "comida" ? d.comida : d.cena;
+ const e = elecciones[tipo];
+ const ci = base.findIndex(x => carbohidratos.includes(x[0]));
+ const pi = base.findIndex(x => proteinas.includes(x[0]));
+ let carbo = ci >= 0 ? (e.carbo || base[ci][0]) : null;
+ let carboCantidad = ci >= 0 ? (e.carboCantidad !== undefined ? e.carboCantidad : base[ci][1]) : 0;
+ let prot = pi >= 0 ? (e.proteina || base[pi][0]) : null;
+ let protCantidad = pi >= 0 ? (e.proteinaCantidad !== undefined ? e.proteinaCantidad : base[pi][1]) : 0;
+ 
+ let filas = base.map((x, i) => (i === ci || i === pi) ? "" : `<div class="row"><select disabled><option>${alimentos[x[0]].nombre}</option></select><input disabled value="${x[1]} g"></div>`).join("");
+
+ let html = `<div class="card"><h2>${titulo}</h2>`;
+ if (pi >= 0) {
+  html += `<div class="row"><select onchange="reajustarProteinaSegunLimite('${tipo}', this.value);render()">${opciones(proteinas, prot)}</select><input value="${Math.round(protCantidad)} g" onchange="elecciones.${tipo}.proteinaCantidad=parseNum(this.value, ${protCantidad});render()"></div>
+  <button class="adjust" onclick="reajustarProteinaSegunLimite('${tipo}', '${prot}')">Autoajustar proteína al objetivo</button>`;
+ }
+ if (ci >= 0) {
+  html += `<div class="row" style="margin-top:12px"><select onchange="reajustarCarboSegunLimite('${tipo}', this.value);render()">${opciones(carbohidratos, carbo)}</select><input value="${Math.round(carboCantidad)} g" onchange="elecciones.${tipo}.carboCantidad=parseNum(this.value, ${carboCantidad});render()"></div>
+  <button class="adjust" onclick="reajustarCarboSegunLimite('${tipo}', '${carbo}')">Autoajustar hidratos al objetivo</button>`;
+ }
+ html += filas + `<div id="${tipo}Notice"></div></div>`;
+ return html;
+}
+
+function construirExtras() {
+ const d = dias[diaActual];
+ return `
+ <div class="card"><h2>🍎 Fruta</h2><select onchange="elecciones.fruta=this.value;render()">${opciones(frutas, elecciones.fruta||"manzana")}</select></div>
+ <div class="card"><h2>🥑 Extra de grasa</h2><div class="row"><select onchange="elecciones.extra.id=this.value;render()">${opciones(grasas, elecciones.extra.id||d.extra[0])}</select><input value="${elecciones.extra.cantidad!==undefined?elecciones.extra.cantidad:d.extra[1]} g" onchange="elecciones.extra.cantidad=parseNum(this.value, 20);render()"></div></div>`;
+}
+
+function construirTotal() {
+ const d = dias[diaActual];
+ let items = [];
+ const b = elecciones.desayuno;
+ if (b.tipo === "avena") {
+  items.push(["avena", parseNum(b.avena, 60)], ["huevo", parseNum(b.huevos, 2)], [b.proteina || "pavo", parseNum(b.cantidad, 60)]);
+ } else {
+  items.push(["huevo", 3], ["pan", d.desayuno.pan], [b.proteina || d.desayuno.proteina, 40]);
+ }
+ ["comida", "cena"].forEach(tipo => {
+  const base = tipo === "comida" ? d.comida : d.cena;
+  const e = elecciones[tipo];
+  const ci = base.findIndex(x => carbohidratos.includes(x[0]));
+  const pi = base.findIndex(x => proteinas.includes(x[0]));
+  base.forEach((x, i) => {
+   if (i === ci && ci >= 0) items.push([e.carbo || x[0], parseNum(e.carboCantidad, x[1])]);
+   else if (i === pi && pi >= 0) items.push([e.proteina || x[0], parseNum(e.proteinaCantidad, x[1])]);
+   else items.push(x);
+  });
+ });
+ items.push([elecciones.fruta || "manzana", 150]);
+ items.push([elecciones.extra.id || d.extra[0], parseNum(elecciones.extra.cantidad !== undefined ? elecciones.extra.cantidad : d.extra[1], 20)]);
+ return totalItems(items);
+}
+
+function avisoComida(tipo) {
+ const el = document.getElementById(tipo + "Notice");
+ if (!el) return;
+ const t = construirTotal();
+ let problemas = [];
+ if (t.kcal > OBJETIVO.kcal) problemas.push("calorías");
+ if (t.p > OBJETIVO.proteina) problemas.push("proteína");
+ if (t.c > OBJETIVO.hidratos) problemas.push("hidratos");
+ if (t.g > OBJETIVO.grasa) problemas.push("grasas");
+ if (problemas.length) el.innerHTML = `<div class="notice bad">🔴 Excede ${problemas.join(", ")}. Pulsa <b>Autoajustar</b>.</div>`;
+ else el.innerHTML = `<div class="notice ok">🟢 Compatible con tus metas.</div>`;
+}
+
+function render() {
+ const d = dias[diaActual];
+ document.getElementById("days").innerHTML = dias.map((x, i) => `<button class="${i===diaActual?"active":""}" onclick="diaActual=${i};elecciones={desayuno:{tipo:'normal'},comida:{},cena:{},fruta:'manzana',extra:{}};render()">${x.nombre}</button>`).join("");
+ document.getElementById("app").innerHTML = construirDesayuno() + construirComidaOCena("comida", "🍗 Comida") + construirComidaOCena("cena", "🌙 Cena") + construirExtras();
+ const t = construirTotal();
+ const exceso = [];
+ if (t.kcal > OBJETIVO.kcal) exceso.push("calorías");
+ if (t.p > OBJETIVO.proteina) exceso.push("proteína");
+ if (t.c > OBJETIVO.hidratos) exceso.push("hidratos");
+ if (t.g > OBJETIVO.grasa) exceso.push("grasas");
+ document.getElementById("summary").innerHTML = `
+ <div class="grid">
+  <div class="macro"><b>${Math.round(t.kcal)}</b> / ${OBJETIVO.kcal} kcal</div>
+  <div class="macro"><b>${Math.round(t.p)} g</b> / ${OBJETIVO.proteina} g prot</div>
+  <div class="macro"><b>${Math.round(t.c)} g</b> / ${OBJETIVO.hidratos} g hidr</div>
+  <div class="macro"><b>${Math.round(t.g)} g</b> / ${OBJETIVO.grasa} g grasa</div>
+ </div>
+ <div class="notice ${exceso.length ? "bad" : "ok"}">${exceso.length ? `⚠️ Supera: ${exceso.join(", ")}.` : `🟢 Correcto con tus 4 metas.`}</div>`;
+ avisoComida("comida");
+ avisoComida("cena");
+ renderPeso();
+ calcularRecargaEntreno();
+}
+
+cargarObjetivosEnInputs();
+render();
+window.onresize = dibujarGrafico;
+</script>
+</body>
+</html>
