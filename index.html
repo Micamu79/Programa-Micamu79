@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programa Micamu79</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f6f8;color:#18202a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+
+/* PANTALLA DE BIENVENIDA (SPLASH SCREEN) */
+#splashScreen {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: #20252b; color: white;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  padding: 24px; text-align: center; z-index: 9999;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+#splashScreen h1 { margin: 0 0 10px 0; font-size: 24px; color: #40916c; }
+#splashScreen p { font-size: 13px; line-height: 1.5; color: #cbd5e1; max-width: 500px; margin: 10px 0; }
+.disclaimer-box { background: rgba(255,255,255,0.08); padding: 12px; border-radius: 10px; font-size: 11px; color: #94a3b8; margin: 15px 0; text-align: left; line-height: 1.4; }
+.btn-splash { background: #2b6cb0; color: white; border: 0; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; }
+
+header{background:#20252b;color:white;padding:18px 16px;display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:20px}
+header p{margin:2px 0 0;font-size:12px;opacity:.8}
+.btn-header{background:rgba(255,255,255,0.15);color:white;border:0;padding:8px 12px;border-radius:8px;font-size:12px;cursor:pointer;width:auto}
+main{max-width:760px;margin:auto;padding:12px}
+.card{background:white;border:1px solid #e1e4e8;border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+h2{font-size:17px;margin:0 0 12px}
+label{font-size:12px;font-weight:600;display:block;margin-bottom:5px}
+input,select,button{width:100%;padding:10px;border-radius:10px;border:1px solid #d9dde2;background:white;font:inherit}
+button{background:#20252b;color:white;font-weight:600;border:0;cursor:pointer;transition:opacity 0.2s}
+button:active{opacity:0.8}
+.btn-primary{background:#2b6cb0;color:white;font-size:15px;padding:12px;margin-top:10px}
+.btn-random{background:#805ad5;color:white;font-size:14px;padding:10px;margin-bottom:12px;border-radius:10px;cursor:pointer;width:100%}
+.btn-shopping{background:#dd6b20;color:white;font-size:15px;padding:12px;margin-top:10px;border-radius:10px;cursor:pointer;width:100%}
+.btn-adjust{background:#276749;color:white;font-size:14px;padding:10px;margin-top:10px;border-radius:8px;cursor:pointer;width:100%}
+.btn-meal-adjust{background:#2d3748;color:white;font-size:12px;padding:6px 10px;margin-top:8px;border-radius:6px;cursor:pointer;width:100%}
+.btn-danger{background:#e53e3e;color:white;margin-top:10px;font-size:12px;padding:8px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.field{margin-bottom:9px}
+.days{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.days button{background:white;color:#18202a;border:1px solid #ddd;padding:8px 4px;font-size:12px;border-radius:8px}
+.days button.active{background:#20252b;color:white;border-color:#20252b}
+.row{display:grid;grid-template-columns:1fr 90px;gap:7px;margin:7px 0}
+.macro{background:#f1f3f5;border-radius:10px;padding:9px 4px;text-align:center;font-size:11px;color:#69717a}
+.macro b{display:block;font-size:16px;color:#18202a;margin-bottom:2px}
+.notice{padding:11px;border-radius:10px;margin-top:10px;font-size:13px;line-height:1.45}
+.info{background:#ebf8ff;color:#2b6cb0}
+.ok{background:#edf8f1;color:#176b40}
+.warn{background:#fff6da;color:#8a6100}
+.small{font-size:12px;color:#6b7280;line-height:1.4}
+.help{display:inline-block;width:18px;height:18px;line-height:18px;text-align:center;border-radius:50%;background:#20252b;color:white;font-size:11px;font-weight:bold;cursor:pointer}
+.meal-box{border:1px solid #e1e4e8;border-radius:12px;padding:12px;margin:10px 0;background:#fafafa}
+.meal-box h3{margin:0 0 10px 0;font-size:15px;color:#20252b}
+.food-item{display:grid;grid-template-columns:1fr 90px;gap:6px;margin-bottom:6px}
+.extra-box{display:grid;grid-template-columns:1fr 1fr;gap:8px;background:#edf2f7;padding:8px 10px;border-radius:8px;margin-bottom:8px;font-size:12px}
+.shopping-list{background:#f8fafc;border:1px solid #e2e8f0;padding:14px;border-radius:12px;margin-top:12px}
+.shopping-group{margin-bottom:12px}
+.shopping-group h4{margin:0 0 6px 0;font-size:14px;color:#2d3748;border-bottom:1px solid #cbd5e0;padding-bottom:4px}
+.shopping-item{font-size:13px;padding:3px 0;display:flex;justify-content:space-between}
+footer{font-size:11px;color:#707780;padding:10px 3px 30px;line-height:1.45;text-align:center}
+@media(max-width:430px){
+  .grid4{grid-template-columns:repeat(2,1fr)}
+  .days{grid-template-columns:repeat(2,1fr)}
+  .extra-box{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- PANTALLA DE BIENVENIDA -->
+<div id="splashScreen">
+  <h1>Programa Micamu79</h1>
+  <p><b>¡Muchísimas gracias por descargar la aplicación!</b><br>Tu herramienta personal para la gestión de nutrición y rendimiento.</p>
+  
+  <div class="disclaimer-box">
+    <b>Aviso Legal y Fuente de Datos:</b><br>
+    Todas las estadísticas y recomendaciones de macronutrientes se basan en los estándares de salud pública de la <b>OMS (Organización Mundial de la Salud)</b>, la <b>EFSA</b> y la <b>USDA</b>.<br><br>
+    <i>Esta aplicación no es un dispositivo ni una consulta médica. Se recomienda un uso responsable y consultar con un profesional sanitario o nutricionista colegiado ante cualquier duda de salud.</i>
+  </div>
+  
+  <button class="btn-splash" onclick="cerrarSplash()">Entrar a la aplicación</button>
+</div>
+
+<header>
+  <div>
+    <h1>Programa Micamu79</h1>
+    <p>Plan nutricional personalizado</p>
+  </div>
+  <button id="btnPerfil" class="btn-header" onclick="mostrarPaso(1)" style="display:none">⚙️ Mi Perfil</button>
+</header>
+
+<main>
+
+<!-- PASO 1: PRESENTACIÓN Y PERFIL -->
+<div id="paso1">
+  <div class="card">
+    <h2>👋 Configura tu perfil</h2>
+    <p class="small">Introduce tus datos para calcular o ajustar tus calorías y macronutrientes objetivo.</p>
+    <div class="grid">
+      <div class="field">
+        <label for="sexo">Sexo</label>
+        <select id="sexo" onchange="recalcularPerfil(true)">
+          <option value="hombre">Hombre</option>
+          <option value="mujer">Mujer</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="edad">Edad</label>
+        <input id="edad" type="number" value="46" oninput="recalcularPerfil(true)">
+      </div>
+      <div class="field">
+        <label for="peso">Peso (kg)</label>
+        <input id="peso" type="number" step="0.1" value="100" oninput="recalcularPerfil(true)">
+      </div>
+      <div class="field">
+        <label for="altura">Altura (cm)</label>
+        <input id="altura" type="number" value="175" oninput="recalcularPerfil(true)">
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:10px">
+      <div class="field">
+        <label for="basal">Gasto en reposo (kcal)</label>
+        <input id="basal" type="number" value="1900" oninput="recalcularPerfil(false)">
+      </div>
+      <div class="field">
+        <label for="movimiento">
+          Calorías movimiento
+          <span class="help" onclick="ayudaMovimiento()">?</span>
+        </label>
+        <input id="movimiento" type="number" value="400" placeholder="kcal extra" oninput="recalcularPerfil(false)">
+      </div>
+    </div>
+
+    <div id="explicacionMovimiento" style="display:none">
+      <div class="notice info">
+        <b>Calorías en movimiento:</b> Estimación de calorías gastadas al día caminando, entrenando o en actividad diaria por encima del reposo.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎯 Objetivos Diarios Calculados</h2>
+    <div class="grid4">
+      <div class="macro"><b id="objKcal">2350</b>kcal</div>
+      <div class="macro"><b id="objP">170</b>g proteína</div>
+      <div class="macro"><b id="objC">230</b>g hidratos</div>
+      <div class="macro"><b id="objG">70</b>g grasa</div>
+    </div>
+    <div id="resumenPerfil" class="notice info" style="margin-top:10px"></div>
+
+    <button class="btn-primary" onclick="aceptarYContinuar()">✅ Aceptar e ir a mis menús</button>
+  </div>
+</div>
+
+<!-- PASO 2: MENÚS Y SEGUIMIENTO -->
+<div id="paso2" style="display:none">
+
+  <!-- DÍAS DE LA SEMANA -->
+  <div class="card">
+    <h2>📅 Menú Semanal</h2>
+    <div id="dias" class="days">
+      <button onclick="seleccionarDia(0)" class="active">Lunes</button>
+      <button onclick="seleccionarDia(1)">Martes</button>
+      <button onclick="seleccionarDia(2)">Miércoles</button>
+      <button onclick="seleccionarDia(3)">Jueves</button>
+      <button onclick="seleccionarDia(4)">Viernes</button>
+      <button onclick="seleccionarDia(5)">Sábado</button>
+      <button onclick="seleccionarDia(6)">Domingo</button>
+    </div>
+  </div>
+
+  <!-- REGISTRO DE EJERCICIO DEL DÍA -->
+  <div class="card">
+    <h2>🏃 Realización de Ejercicio Diario</h2>
+    <div class="grid">
+      <div class="field">
+        <label for="tipoEjercicio">Tipo de Actividad</label>
+        <select id="tipoEjercicio">
+          <option value="fuerza">Entrenamiento de Fuerza / Pesas</option>
+          <option value="running">Running / Carrera</option>
+          <option value="ciclismo">Ciclismo / Bici</option>
+          <option value="caminar">Caminata / Pasos</option>
+          <option value="otro">Otro Ejercicio Cardio</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="kcalEjercicio">Calorías Quemadas (según reloj/móvil)</label>
+        <input id="kcalEjercicio" type="number" placeholder="Ej: 500" oninput="calcularTraduccionEjercicio()">
+      </div>
+    </div>
+    <div id="leyendaEjercicio" style="display:none;" class="notice info"></div>
+  </div>
+
+  <!-- MENÚ INTERACTIVO -->
+  <div class="card">
+    <h2 id="tituloDia">🍽️ Menú del Lunes</h2>
+    <button class="btn-random" onclick="generarDiaAleatorio()">🎲 Generar día aleatorio equilibrado</button>
+    <div id="contenedorMenu"></div>
+  </div>
+
+  <!-- RESUMEN DÍA -->
+  <div class="card">
+    <h2>📊 Resumen Nutricional del Día</h2>
+    <div class="grid4">
+      <div class="macro"><b id="sumKcal">0</b>kcal</div>
+      <div class="macro"><b id="sumP">0</b>g proteína</div>
+      <div class="macro"><b id="sumC">0</b>g hidratos</div>
+      <div class="macro"><b id="sumG">0</b>g grasa</div>
+    </div>
+    <div id="aviso"></div>
+    <button id="btnAutoAjustar" class="btn-adjust" onclick="reajustarMenu()" style="display:none">🪄 Reajustar menú diario completo</button>
+  </div>
+
+  <!-- LISTA DE LA COMPRA SEMANAL -->
+  <div class="card">
+    <h2>🛒 Lista de la Compra Semanal</h2>
+    <p class="small">Suma todos los alimentos configurados de Lunes a Domingo.</p>
+    <button class="btn-shopping" onclick="generarListaCompra()">🛒 Ver Lista de la Compra Semanal</button>
+    <div id="contenedorListaCompra" style="display:none"></div>
+  </div>
+
+  <!-- CONTROL DE PESO -->
+  <div class="card">
+    <h2>⚖️ Registro de Peso Matutino</h2>
+    <div class="row">
+      <input id="pesoDiario" type="number" step="0.1" placeholder="Ej: 99.4">
+      <button onclick="guardarPeso()">Guardar</button>
+    </div>
+    <div id="historial"></div>
+    <button class="btn-danger" onclick="borrarPesos()">Borrar historial</button>
+  </div>
+
+</div>
+
+<footer>
+Los valores nutricionales son orientativos.<br>
+Arroz, pasta, avena, quinoa y cuscús se calculan en peso seco.
+</footer>
+
+</main>
+
+<script>
+var alimentos = {
+  ninguno: {n:"-- Ninguno / Vacío --", k:0, p:0, c:0, g:0, tipo:"vacio", cat:"Ninguno"},
+  arroz: {n:"Arroz", k:360, p:7, c:80, g:1, tipo:"hidrato", cat:"Hidratos (Carbohidratos)"},
+  pasta: {n:"Pasta", k:350, p:12, c:72, g:2, tipo:"hidrato", cat:"Hidratos (Carbohidratos)"},
+  patata: {n:"Patata", k:77, p:2, c:17, g:.1, tipo:"hidrato", cat:"Hidratos (Carbohidratos)"},
+  patata_artiq: {n:"Patatas congeladas Artiq", k:135, p:2.5, c:22, g:3.8, tipo:"hidrato", cat:"Hidratos (Carbohidratos)"},
+  pan: {n:"Pan", k:250, p:8, c:49, g:2, tipo:"hidrato", cat:"Hidratos (Carbohidratos)"},
+  avena: {n:"Avena", k:380, p:13, c:67, g:7, tipo:"hidrato", cat:"Hidratos (Carbohidratos)"},
+  pollo: {n:"Pechuga de pollo", k:110, p:23, c:0, g:1.5, tipo:"proteina", cat:"Carnes y Aves"},
+  solomillo_pollo: {n:"Solomillo de pollo", k:112, p:23.5, c:0, g:1.2, tipo:"proteina", cat:"Carnes y Aves"},
+  pavo: {n:"Pavo / Jamón de Pavo", k:105, p:24, c:0, g:1, tipo:"proteina", cat:"Carnes y Fiambres"},
+  jamon_york: {n:"Jamón York extra", k:100, p:18, c:1, g:2.5, tipo:"proteina", cat:"Carnes y Fiambres"},
+  carne_picada_ternera: {n:"Carne picada ternera", k:215, p:19, c:0, g:15, tipo:"proteina", cat:"Carnes y Aves"},
+  filete_ternera: {n:"Filete de ternera", k:135, p:21, c:0, g:5.5, tipo:"proteina", cat:"Carnes y Aves"},
+  lomo_adobado_horno: {n:"Lomo adobado horno", k:125, p:20, c:1, g:4.5, tipo:"proteina", cat:"Carnes y Aves"},
+  lomo_adobado_skin: {n:"Lomo adobado Skin", k:130, p:19.5, c:1.2, g:5, tipo:"proteina", cat:"Carnes y Aves"},
+  merluza: {n:"Merluza", k:80, p:18, c:0, g:1.5, tipo:"proteina", cat:"Pescados"},
+  salmon: {n:"Salmón", k:205, p:20, c:0, g:13, tipo:"proteina", cat:"Pescados"},
+  huevo: {n:"Huevo", k:72, p:6.3, c:.4, g:4.8, tipo:"proteina", cat:"Huevos y Lácteos"},
+  atun: {n:"Atún al natural", k:116, p:26, c:0, g:1, tipo:"proteina", cat:"Pescados y Conservas"},
+  brocoli: {n:"Brócoli / Coliflor", k:34, p:2.8, c:7, g:.4, tipo:"verdura", cat:"Verduras y Hortalizas"},
+  ensalada: {n:"Ensalada variada", k:15, p:1.2, c:2.9, g:.2, tipo:"verdura", cat:"Verduras y Hortalizas"},
+  salteado: {n:"Salteado de verduras", k:35, p:1.5, c:6, g:.3, tipo:"verdura", cat:"Verduras y Hortalizas"},
+  judias: {n:"Judías verdes", k:31, p:1.8, c:7, g:.2, tipo:"verdura", cat:"Verduras y Hortalizas"},
+  esparragos: {n:"Espárragos trigueros", k:20, p:2.2, c:3.9, g:.2, tipo:"verdura", cat:"Verduras y Hortalizas"},
+  espinacas: {n:"Espinacas / Acelgas", k:23, p:2.9, c:3.6, g:.4, tipo:"verdura", cat:"Verduras y Hortalizas"},
+  aceite: {n:"Aceite de oliva", k:884, p:0, c:0, g:100, tipo:"grasa", cat:"Aceites y Grasas"},
+  nueces: {n:"Nueces", k:654, p:15, c:14, g:65, tipo:"grasa", cat:"Frutos Secos"},
+  manzana: {n:"Manzana", k:52, p:.3, c:14, g:.2, tipo:"fruta", cat:"Frutas"},
+  platano: {n:"Plátano", k:89, p:1.1, c:23, g:.3, tipo:"fruta", cat:"Frutas"},
+  fresas: {n:"Fresas", k:33, p:.7, c:7.7, g:.3, tipo:"fruta", cat:"Frutas"},
+  naranja: {n:"Naranja", k:47, p:.9, c:11.8, g:.1, tipo:"fruta", cat:"Frutas"},
+  arandanos: {n:"Arándanos", k:57, p:.7, c:14, g:.3, tipo:"fruta", cat:"Frutas"}
+};
+
+var nombresDias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+var diaActual = 0;
+
+var planSemanal = JSON.parse(localStorage.getItem('micamu_plan')) || Array(7).fill(null).map(function() {
+  return {
+    cafe: "si",
+    azucar: "no",
+    desayuno: [{id:'huevo', cant:2}, {id:'pan', cant:60}, {id:'jamon_york', cant:50}],
+    almuerzo: [{id:'manzana', cant:150}, {id:'nueces', cant:20}],
+    comida: [{id:'patata_artiq', cant:150}, {id:'filete_ternera', cant:180}, {id:'brocoli', cant:150}, {id:'aceite', cant:10}],
+    merienda: [{id:'platano', cant:120}, {id:'atun', cant:80}],
+    cena: [{id:'patata', cant:200}, {id:'merluza', cant:200}, {id:'ensalada', cant:150}, {id:'aceite', cant:10}]
+  };
+});
+
+var pesos = JSON.parse(localStorage.getItem('micamu_pesos') || '[]');
+var perfil = JSON.parse(localStorage.getItem('micamu_perfil') || 'null');
+
+function cerrarSplash() {
+  var splash = document.getElementById("splashScreen");
+  splash.style.opacity = "0";
+  setTimeout(function() { splash.style.display = "none"; }, 500);
+}
+
+function num(v, def) {
+  var n = parseFloat(v);
+  return isNaN(n) ? (def || 0) : n;
+}
+
+function ayudaMovimiento() {
+  var el = document.getElementById("explicacionMovimiento");
+  el.style.display = el.style.display === "none" ? "block" : "none";
+}
+
+function recalcularPerfil(autoBasal) {
+  var sexo = document.getElementById("sexo").value;
+  var edad = num(document.getElementById("edad").value, 46);
+  var peso = num(document.getElementById("peso").value, 100);
+  var altura = num(document.getElementById("altura").value, 175);
+  
+  var basalEl = document.getElementById("basal");
+  if (autoBasal) {
+    var basalCalc = (sexo === "hombre") ? (10 * peso + 6.25 * altura - 5 * edad + 5) : (10 * peso + 6.25 * altura - 5 * edad - 161);
+    basalEl.value = Math.round(basalCalc);
+  }
+
+  var basal = num(basalEl.value, 1900);
+  var movimiento = num(document.getElementById("movimiento").value, 400);
+  var total = basal + movimiento - 300;
+
+  var p = Math.round(peso * 1.8);
+  var g = Math.round(peso * 0.75);
+  var c = Math.round((total - (p * 4) - (g * 9)) / 4);
+
+  document.getElementById("objKcal").innerText = Math.round(total);
+  document.getElementById("objP").innerText = p;
+  document.getElementById("objC").innerText = c;
+  document.getElementById("objG").innerText = g;
+
+  document.getElementById("resumenPerfil").innerHTML = 
+    "Gasto Reposo: <b>" + Math.round(basal) + " kcal</b> | Movimiento: <b>" + movimiento + " kcal</b><br>" +
+    "Objetivo diario ajustado con déficit: <b>" + Math.round(total) + " kcal</b>.";
+}
+
+function aceptarYContinuar() {
+  var datosPerfil = {
+    sexo: document.getElementById("sexo").value,
+    edad: document.getElementById("edad").value,
+    peso: document.getElementById("peso").value,
+    altura: document.getElementById("altura").value,
+    basal: document.getElementById("basal").value,
+    movimiento: document.getElementById("movimiento").value,
+    kcalObj: document.getElementById("objKcal").innerText
+  };
+  localStorage.setItem('micamu_perfil', JSON.stringify(datosPerfil));
+  mostrarPaso(2);
+}
+
+function mostrarPaso(paso) {
+  window.scrollTo(0, 0);
+  if (paso === 1) {
+    document.getElementById("paso1").style.display = "block";
+    document.getElementById("paso2").style.display = "none";
+    document.getElementById("btnPerfil").style.display = "none";
+  } else {
+    document.getElementById("paso1").style.display = "none";
+    document.getElementById("paso2").style.display = "block";
+    document.getElementById("btnPerfil").style.display = "block";
+    seleccionarDia(diaActual);
+  }
+}
+
+function seleccionarDia(index) {
+  diaActual = index;
+  var btns = document.querySelectorAll("#dias button");
+  btns.forEach(function(b, i) { b.className = (i === index) ? "active" : ""; });
+  document.getElementById("tituloDia").innerText = "🍽️ Menú del " + nombresDias[index];
+  renderMenu();
+}
+
+function cambiarOpcionCafe(campo, valor) {
+  planSemanal[diaActual][campo] = valor;
+  renderMenu();
+}
+
+function randItem(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function generarDiaAleatorio() {
+  var prots = ["pollo", "solomillo_pollo", "pavo", "filete_ternera", "carne_picada_ternera", "lomo_adobado_horno", "lomo_adobado_skin", "merluza", "salmon"];
+  var carbsComida = ["patata_artiq", "patata", "arroz", "pasta"];
+  var verduras = ["brocoli", "ensalada", "salteado", "judias", "esparragos", "espinacas"];
+  var frutas = ["manzana", "platano", "fresas", "naranja", "arandanos"];
+
+  var cantHuevos = Math.floor(Math.random() * 2) + 2; // Máximo 2 o 3 huevos
+  var protC1 = randItem(prots);
+  var carbC1 = randItem(carbsComida);
+  var cantCarbC1 = (carbC1 === 'arroz' || carbC1 === 'pasta') ? 60 : 180;
+
+  var protC2 = randItem(prots.filter(function(x){return x!==protC1;}));
+  var carbC2 = randItem(carbsComida);
+  var cantCarbC2 = (carbC2 === 'arroz' || carbC2 === 'pasta') ? 60 : 180;
+
+  planSemanal[diaActual] = {
+    cafe: "si",
+    azucar: Math.random() > 0.5 ? "si" : "no",
+    desayuno: [
+      {id: 'huevo', cant: cantHuevos},
+      {id: randItem(['pan', 'avena']), cant: 60},
+      {id: randItem(['jamon_york', 'pavo']), cant: 50}
+    ],
+    almuerzo: [
+      {id: randItem(frutas), cant: 120},
+      {id: 'nueces', cant: 20}
+    ],
+    comida: [
+      {id: carbC1, cant: cantCarbC1},
+      {id: protC1, cant: 180},
+      {id: randItem(verduras), cant: 150},
+      {id: 'aceite', cant: 10}
+    ],
+    merienda: [
+      {id: randItem(frutas), cant: 120},
+      {id: 'atun', cant: 80}
+    ],
+    cena: [
+      {id: carbC2, cant: cantCarbC2},
+      {id: protC2, cant: 180},
+      {id: randItem(verduras), cant: 150},
+      {id: 'aceite', cant: 10}
+    ]
+  };
+
+  renderMenu();
+  reajustarMenu();
+}
+
+function renderMenu() {
+  var contenedor = document.getElementById("contenedorMenu");
+  var menu = planSemanal[diaActual];
+  var html = "";
+  var totalKcal = 0, totalP = 0, totalC = 0, totalG = 0;
+
+  var nombresComidas = {
+    desayuno: "🥣 Desayuno",
+    almuerzo: "🍎 Media Mañana",
+    comida: "🍲 Comida",
+    merienda: "🥪 Merienda",
+    cena: "🐟 Cena"
+  };
+
+  for (var comida in nombresComidas) {
+    html += '<div class="meal-box"><h3>' + nombresComidas[comida] + '</h3>';
+
+    if (comida === 'desayuno') {
+      var cafeVal = menu.cafe || "si";
+      var azucarVal = menu.azucar || "no";
+      html += '<div class="extra-box">' +
+        '<div><label>Café por la mañana:</label><select onchange="cambiarOpcionCafe(\'cafe\', this.value)"><option value="si" ' + (cafeVal === "si" ? "selected" : "") + '>Sí</option><option value="no" ' + (cafeVal === "no" ? "selected" : "") + '>No</option></select></div>' +
+        '<div><label>¿Con azúcar?:</label><select onchange="cambiarOpcionCafe(\'azucar\', this.value)"><option value="no" ' + (azucarVal === "no" ? "selected" : "") + '>No (0 kcal)</option><option value="si" ' + (azucarVal === "si" ? "selected" : "") + '>Sí (+20 kcal / 5g C)</option></select></div>' +
+        '</div>';
+
+      if (cafeVal === "si" && azucarVal === "si") {
+        totalKcal += 20;
+        totalC += 5;
+      }
+    }
+
+    if (menu[comida]) {
+      menu[comida].forEach(function(item, idx) {
+        var a = alimentos[item.id] || alimentos.ninguno;
+        var factor = (item.id === 'huevo') ? item.cant : (item.cant / 100);
+        
+        totalKcal += a.k * factor;
+        totalP += a.p * factor;
+        totalC += a.c * factor;
+        totalG += a.g * factor;
+
+        var opciones = Object.keys(alimentos).map(function(key) {
+          return '<option value="' + key + '" ' + (key === item.id ? 'selected' : '') + '>' + alimentos[key].n + '</option>';
+        }).join('');
+
+        html += '<div class="food-item">' +
+          '<select onchange="cambiarAlimento(\'' + comida + '\', ' + idx + ', this.value)">' + opciones + '</select>' +
+          '<input type="number" value="' + Math.round(item.cant) + '" onchange="cambiarCantidad(\'' + comida + '\', ' + idx + ', this.value)">' +
+          '</div>';
+      });
+    }
+
+    html += '<button class="btn-meal-adjust" onclick="reajustarComidaEspecifica(\'' + comida + '\')">🪄 Ajustar solo esta comida</button>';
+    html += '</div>';
+  }
+
+  contenedor.innerHTML = html;
+
+  document.getElementById("sumKcal").innerText = Math.round(totalKcal);
+  document.getElementById("sumP").innerText = Math.round(totalP);
+  document.getElementById("sumC").innerText = Math.round(totalC);
+  document.getElementById("sumG").innerText = Math.round(totalG);
+
+  var objKcal = num(document.getElementById("objKcal").innerText, 2350);
+  var dif = Math.round(totalKcal - objKcal);
+  var avisoEl = document.getElementById("aviso");
+  var btnAjuste = document.getElementById("btnAutoAjustar");
+
+  if (Math.abs(dif) <= 80) {
+    avisoEl.innerHTML = '<div class="notice ok">¡Menú perfecto! Ajustado a tu objetivo diario.</div>';
+    btnAjuste.style.display = "none";
+  } else if (dif > 80) {
+    avisoEl.innerHTML = '<div class="notice warn">Te estás pasando por ' + dif + ' kcal sobre tu objetivo.</div>';
+    btnAjuste.style.display = "block";
+  } else {
+    avisoEl.innerHTML = '<div class="notice info">Te faltan ' + Math.abs(dif) + ' kcal para completar el día.</div>';
+    btnAjuste.style.display = "block";
+  }
+
+  localStorage.setItem('micamu_plan', JSON.stringify(planSemanal));
+}
+
+function cambiarAlimento(comida, idx, nuevoId) {
+  var itemAnterior = planSemanal[diaActual][comida][idx];
+  var anteriorId = itemAnterior.id;
+  var alimentoNuevo = alimentos[nuevoId];
+
+  itemAnterior.id = nuevoId;
+
+  if (nuevoId === 'ninguno') {
+    itemAnterior.cant = 0;
+  } else if (nuevoId === 'huevo') {
+    itemAnterior.cant = 2;
+  } else if (anteriorId === 'huevo' && alimentoNuevo.tipo === "proteina") {
+    itemAnterior.cant = 180;
+  } else if (alimentoNuevo.tipo === "verdura") {
+    itemAnterior.cant = 150;
+  } else if (alimentoNuevo.tipo === "fruta" && itemAnterior.cant < 30) {
+    itemAnterior.cant = 120;
+  } else if (itemAnterior.cant <= 0) {
+    itemAnterior.cant = 100;
+  }
+
+  renderMenu();
+}
+
+function cambiarCantidad(comida, idx, nuevaCant) {
+  planSemanal[diaActual][comida][idx].cant = num(nuevaCant, 0);
+  renderMenu();
+}
+
+function reajustarMenu() {
+  var objKcal = num(document.getElementById("objKcal").innerText, 2350);
+  var menu = planSemanal[diaActual];
+  var actualKcal = 0;
+
+  if (menu.cafe === "si" && menu.azucar === "si") actualKcal += 20;
+
+  for (var comida in menu) {
+    if (Array.isArray(menu[comida])) {
+      menu[comida].forEach(function(item) {
+        var a = alimentos[item.id] || alimentos.ninguno;
+        var factor = (item.id === 'huevo') ? item.cant : (item.cant / 100);
+        actualKcal += a.k * factor;
+      });
+    }
+  }
+
+  if (actualKcal <= 0) return;
+  var ratio = objKcal / actualKcal;
+
+  for (var comida in menu) {
+    if (Array.isArray(menu[comida])) {
+      menu[comida].forEach(function(item) {
+        if (item.id !== 'ninguno') {
+          if (item.id === 'huevo') {
+            item.cant = Math.min(3, Math.max(1, Math.round(item.cant * ratio)));
+          } else {
+            item.cant = Math.max(5, Math.round(item.cant * ratio));
+          }
+        }
+      });
+    }
+  }
+
+  renderMenu();
+}
+
+function reajustarComidaEspecifica(comidaNombre) {
+  var objKcalTotal = num(document.getElementById("objKcal").innerText, 2350);
+  var repartoTarget = { desayuno: 0.25, almuerzo: 0.10, comida: 0.35, merienda: 0.10, cena: 0.20 };
+  var targetComidaKcal = objKcalTotal * (repartoTarget[comidaNombre] || 0.20);
+
+  var menuComida = planSemanal[diaActual][comidaNombre];
+  if (!menuComida) return;
+
+  var actualComidaKcal = 0;
+  menuComida.forEach(function(item) {
+    var a = alimentos[item.id] || alimentos.ninguno;
+    var factor = (item.id === 'huevo') ? item.cant : (item.cant / 100);
+    actualComidaKcal += a.k * factor;
+  });
+
+  if (actualComidaKcal <= 0) return;
+  var ratio = targetComidaKcal / actualComidaKcal;
+
+  menuComida.forEach(function(item) {
+    if (item.id !== 'ninguno') {
+      if (item.id === 'huevo') {
+        item.cant = Math.min(3, Math.max(1, Math.round(item.cant * ratio)));
+      } else {
+        item.cant = Math.max(10, Math.round(item.cant * ratio));
+      }
+    }
+  });
+
+  renderMenu();
+}
+
+function calcularTraduccionEjercicio() {
+  var kcal = num(document.getElementById("kcalEjercicio").value, 0);
+  var div = document.getElementById("leyendaEjercicio");
+
+  if (kcal <= 0) {
+    div.style.display = "none";
+    return;
+  }
+
+  var arrozG = Math.round((kcal / 360) * 100);
+  var patataG = Math.round((kcal / 77) * 100);
+  var polloG = Math.round((kcal / 110) * 100);
+  var manzanaG = Math.round((kcal / 52) * 100);
+
+  div.innerHTML = "<b>🔥 ¡Gran entrenamiento!</b> Habiendo quemado <b>" + kcal + " kcal</b>, eso equivale nutricionalmente a agregar cualquiera de estas opciones a tu día:<br>" +
+    "• <b>" + arrozG + "g</b> de arroz (peso seco)<br>" +
+    "• <b>" + patataG + "g</b> de patatas cocidas/asadas<br>" +
+    "• <b>" + polloG + "g</b> de pechuga de pollo<br>" +
+    "• <b>" + manzanaG + "g</b> de manzana limpia";
+  div.style.display = "block";
+}
+
+function generarListaCompra() {
+  var totales = {};
+  var textoCopiar = "🛒 LISTA DE LA COMPRA SEMANAL (Micamu79)\n\n";
+
+  planSemanal.forEach(function(dia) {
+    for (var comida in dia) {
+      if (Array.isArray(dia[comida])) {
+        dia[comida].forEach(function(item) {
+          if (item.id !== 'ninguno' && item.cant > 0) {
+            if (!totales[item.id]) totales[item.id] = 0;
+            totales[item.id] += item.cant;
+          }
+        });
+      }
+    }
+  });
+
+  var categorias = {};
+  for (var id in totales) {
+    var a = alimentos[id];
+    if (a) {
+      var cat = a.cat || "Otros";
+      if (!categorias[cat]) categorias[cat] = [];
+      categorias[cat].push({
+        nombre: a.n,
+        cant: totales[id],
+        unidad: (id === 'huevo') ? 'uds' : 'g'
+      });
+    }
+  }
+
+  var html = '<div class="shopping-list">';
+  for (var catName in categorias) {
+    html += '<div class="shopping-group"><h4>' + catName + '</h4>';
+    textoCopiar += "📌 " + catName + ":\n";
+    categorias[catName].forEach(function(item) {
+      var displayCant = item.cant >= 1000 && item.unidad === 'g' 
+        ? (item.cant / 1000).toFixed(2) + " kg" 
+        : item.cant + " " + item.unidad;
+      
+      html += '<div class="shopping-item"><span>' + item.nombre + '</span><b>' + displayCant + '</b></div>';
+      textoCopiar += "  • " + item.nombre + ": " + displayCant + "\n";
+    });
+    html += '</div>';
+    textoCopiar += "\n";
+  }
+
+  html += '<button class="btn-adjust" onclick="copiarListaText(\`' + encodeURIComponent(textoCopiar) + '\`)">📋 Copiar Lista al Portapapeles</button>';
+  html += '</div>';
+
+  var contenedor = document.getElementById("contenedorListaCompra");
+  contenedor.innerHTML = html;
+  contenedor.style.display = "block";
+}
+
+function copiarListaText(textoEncoded) {
+  var texto = decodeURIComponent(textoEncoded);
+  navigator.clipboard.writeText(texto).then(function() {
+    alert("¡Lista de la compra copiada al portapapeles!");
+  }).catch(function() {
+    alert("No se pudo copiar automáticamente. Puedes seleccionar el texto.");
+  });
+}
+
+function guardarPeso() {
+  var val = num(document.getElementById("pesoDiario").value, 0);
+  if (val > 0) {
+    var fecha = new Date().toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    pesos.unshift({fecha: fecha, peso: val});
+    localStorage.setItem('micamu_pesos', JSON.stringify(pesos));
+    renderHistorial();
+    document.getElementById("pesoDiario").value = '';
+  }
+}
+
+function borrarPesos() {
+  if (confirm("¿Estás seguro de que deseas borrar todo el historial de pesos?")) {
+    pesos = [];
+    localStorage.removeItem('micamu_pesos');
+    renderHistorial();
+  }
+}
+
+function renderHistorial() {
+  var el = document.getElementById("historial");
+  if (pesos.length === 0) {
+    el.innerHTML = '<p class="small">Sin registros de peso.</p>';
+    return;
+  }
+  var html = '<div style="max-height:140px;overflow-y:auto;margin-top:10px">';
+  pesos.forEach(function(item) {
+    html += '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee;font-size:12px"><span>' + item.fecha + '</span><b>' + item.peso + ' kg</b></div>';
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+window.onload = function() {
+  renderHistorial();
+  if (perfil) {
+    document.getElementById("sexo").value = perfil.sexo;
+    document.getElementById("edad").value = perfil.edad;
+    document.getElementById("peso").value = perfil.peso;
+    document.getElementById("altura").value = perfil.altura;
+    document.getElementById("basal").value = perfil.basal || 1900;
+    document.getElementById("movimiento").value = perfil.movimiento;
+    recalcularPerfil(false);
+    mostrarPaso(2);
+  } else {
+    recalcularPerfil(true);
+    mostrarPaso(1);
+  }
+};
+</script>
+</body>
+</html>
